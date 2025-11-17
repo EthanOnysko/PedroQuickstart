@@ -69,14 +69,14 @@ public class RobotTele extends OpMode{
 
 
         if (gamepad2.b && !intakeOn) {
-            bot.intake.setPower(intakePower);
+            bot.intake.setPower(-intakePower);
             intakeOn = true;
         } else if (gamepad2.b && intakeOn) {
             bot.intake.setPower(0);
             intakeOn = false;
         }
 
-        /*
+
         if (gamepad2.a && !spinnerOn) {
             bot.launcher1.setPower(1);
             bot.launcher2.setPower(1);
@@ -87,9 +87,9 @@ public class RobotTele extends OpMode{
             spinnerOn = false;
         }
 
-         */
 
 
+/*
         if (gamepad2.a && !spinnerOn) {
             bot.RPMshooter(OnRPM);
             spinnerOn = true;
@@ -98,20 +98,22 @@ public class RobotTele extends OpMode{
             spinnerOn = false;
         }
 
+ */
 
 
-        if (gamepad2.x && !bumped && notBumped) {
+
+        if (gamepad2.x && !bumped && notBumped && !gamepad2.x) {
             bot.bumper.setPosition(bot.bumperUp);
             bumped = true;
             notBumped = false;
         }
-        else if (gamepad2.x && bumped && !notBumped) {
+        else if (gamepad2.x && bumped && !notBumped && !gamepad2.x) {
             bot.bumper.setPosition(bot.bumperRest);
             bumped = false;
             notBumped = true;
         }
 
-        double power = gamepad1.left_trigger;
+        double power = gamepad2.left_trigger;
         bot.spindexer.setPower(power/5);
 
 

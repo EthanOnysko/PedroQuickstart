@@ -21,10 +21,10 @@ public class Robot {
 
     double velocity;
 
-    public static double bumperRest;
-    public static double bumperUp;
+    public static double bumperRest = 0.1;
+    public static double bumperUp = 0.4;
     public static double intakePower = 0.5;
-    public static int OnRPM = 6000;
+    public static int OnRPM = 3000;
 
 
 
