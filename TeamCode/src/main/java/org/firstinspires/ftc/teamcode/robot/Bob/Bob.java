@@ -64,24 +64,19 @@ public class Bob extends Meccanum implements Robot {
 
         vs = hardwareMap.voltageSensor.get("Control Hub");
 
-        // Define drive motors (new names)
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("fl");
         motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("bl");
         motorFrontRight = (DcMotorEx) hardwareMap.dcMotor.get("fr");
         motorBackRight = (DcMotorEx) hardwareMap.dcMotor.get("br");
 
-        // Reverse right side motors
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // Set braking
         setZeroPowerBehavior(BRAKE);
 
-        // Define shooter motors
         shooterRight = (DcMotorEx) hardwareMap.dcMotor.get("sr");
         shooterLeft = (DcMotorEx) hardwareMap.dcMotor.get("sl");
 
-        // Configure shooters
         shooterLeft.setZeroPowerBehavior(FLOAT);
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -91,23 +86,18 @@ public class Bob extends Meccanum implements Robot {
         shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Define intake
         intake = (DcMotorEx) hardwareMap.dcMotor.get("intake");
         intake.setZeroPowerBehavior(BRAKE);
 
-        // Define spindexer and encoder
         spindexer = hardwareMap.get(CRServo.class, "spindexer");
         spincoder = hardwareMap.get(DcMotorEx.class, "bl"); // Using back left as encoder
         spincoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spincoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        // Define transfer servo
         transfer = hardwareMap.get(Servo.class, "transfer");
 
-        // Define light
         light = hardwareMap.get(Servo.class, "light");
 
-        // Start controllers
         shooterController.start();
         spindexerController.start();
         intakeController.start();
@@ -125,11 +115,10 @@ public class Bob extends Meccanum implements Robot {
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
-//        tele.addData("voltage", vs.getVoltage());
-//        tele.update();
+
     }
 
-    // ==================== SHOOTER CONTROLLER ====================
+    // TODO: SHOOTER SHIT
 
     public class ShooterController {
         private int targetRPM = 0;
@@ -160,8 +149,6 @@ public class Bob extends Meccanum implements Robot {
             shooterLeft.setVelocity(velocity);
             shooterRight.setVelocity(velocity);
 
-//            tele.addData("Shooter RPM", targetRPM);
-//            tele.addData("Shooter Velocity", velocity);
         }
 
         private double RPMtoVelocity(int targetRPM) {
@@ -173,7 +160,7 @@ public class Bob extends Meccanum implements Robot {
         }
     }
 
-    // ==================== SPINDEXER CONTROLLER ====================
+    // TODO: SPINDEXER SHIT
 
     public class SpindexerController {
         private PIDSpindexer spinPID;
@@ -207,14 +194,14 @@ public class Bob extends Meccanum implements Robot {
             incrementAngle(60);
         }
 
-        public void setEmergencyMode(boolean emergency) {
-            emergencyMode = emergency;
-            if (emergency) {
-                spinPID.setConsts(SPINDEX_EMERGENCY_KP, SPINDEX_EMERGENCY_KI, SPINDEX_EMERGENCY_KD);
-            } else {
-                spinPID.setConsts(SPINDEX_KP, SPINDEX_KI, SPINDEX_KD);
-            }
-        }
+//        public void setE(boolean emergency) {
+//            emergencyMode = emergency;
+//            if (emergency) {
+//                spinPID.setConsts(SPINDEX_EMERGENCY_KP, SPINDEX_EMERGENCY_KI, SPINDEX_EMERGENCY_KD);
+//            } else {
+//                spinPID.setConsts(SPINDEX_KP, SPINDEX_KI, SPINDEX_KD);
+//            }
+//        }
 
         public void updateLight() {
             if (targetAngle % 120 == 0) {
@@ -230,22 +217,16 @@ public class Bob extends Meccanum implements Robot {
 
             double power = -spinPID.update(currentTicks);
 
-            // Apply power limits in emergency mode
             if (emergencyMode && (power > 0.1 || power < -0.1)) {
                 spindexer.setPower(power * SPINDEX_EMERGENCY_POWER_LIMIT);
             } else {
                 spindexer.setPower(power);
             }
 
-            // Calculate current angle for telemetry
             double wrappedTicks = currentTicks % TICKS_PER_REV_SPINDEXER;
             if (wrappedTicks < 0) wrappedTicks += TICKS_PER_REV_SPINDEXER;
             double currentAngle = (wrappedTicks / TICKS_PER_REV_SPINDEXER) * 360.0;
-//
-//            tele.addData("Spindex Target Angle", targetAngle);
-//            tele.addData("Spindex Current Angle", currentAngle);
-//            tele.addData("Spindex Power", power);
-//            tele.addData("Spindex Emergency Mode", emergencyMode);
+
         }
 
         public double getCurrentAngle() {
@@ -256,17 +237,16 @@ public class Bob extends Meccanum implements Robot {
         }
     }
 
-    // ==================== PID SPINDEXER CLASS ====================
 
 
 
-    // ==================== INTAKE CONTROLLER ====================
+    // TODO: INTAKE SHIT
+
 
     public class IntakeController {
         private double intakePower = 0;
 
         public void start() {
-            // Initialize intake
         }
 
         public void intake() {
@@ -283,11 +263,10 @@ public class Bob extends Meccanum implements Robot {
 
         public void intakeTick() {
             intake.setPower(intakePower);
-//            tele.addData("Intake Power", intakePower);
         }
     }
 
-    // ==================== TRANSFER CONTROLLER ====================
+    // TODO: TRANSFER SHIT
 
     public class TransferController {
         private boolean transferPulse = false;
@@ -323,8 +302,7 @@ public class Bob extends Meccanum implements Robot {
             }
 
             transfer.setPosition(transferPosition);
-//            tele.addData("Transfer Position", transferPosition);
-//            tele.addData("Transfer Pulsing", transferPulse);
+
         }
 
         public boolean isPulsing() {
@@ -375,7 +353,6 @@ public class Bob extends Meccanum implements Robot {
         if (MACROING) {
             BobState m = macroState;
             if (m.shooterRPM != null) shooterController.setRPM(m.shooterRPM);
-//            if (m.spindexerAngle != null) spindexerController.setTargetAngle(m.spindexerAngle);
             if (m.spindexerAngle != null) spindexerController.incrementAngle(m.spindexerAngle);
 
             if (m.transferPosition != null) {
@@ -414,7 +391,6 @@ public class Bob extends Meccanum implements Robot {
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
-//        tele.addData("voltage", vs.getVoltage());
-//        tele.update();
+
     }
 }

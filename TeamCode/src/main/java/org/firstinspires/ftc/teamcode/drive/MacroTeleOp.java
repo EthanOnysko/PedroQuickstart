@@ -33,20 +33,19 @@ public class MacroTeleOp extends OpMode {
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();
     Deque<Gamepad> gamepad1History = new LinkedList<>(), gamepad2History = new LinkedList<>();
 
-    // Limelight rotation PID
-    private PID rotationPID = new PID(.5,0,.05);
+    private PID rotationPID = new PID(2,0,.05);
     private boolean rotationCorrectionOn = false;
     private double rotationPower = 0;
     private double currentAngle = 0;
 
-    private double rotationTarget = 0; // Target angle offset (0 = center on target)
-    private double rotationErrorThresh = 0.05; // Radians
+    private double rotationTarget = 0;
+    private double rotationErrorThresh = 0.05;
     private double rotationDerivativeThresh = 0.1;
 
     @Override
     public void init() {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
-        limelight.setPollRateHz(100); // This sets how often we ask Limelight for data (100 times per second)
+        limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
         bob.init(hardwareMap);
         rotationPID.init(0);
@@ -64,33 +63,27 @@ public class MacroTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        // Safety check
         if (gamepad2.start || gamepad1.start) return;
 
         updateRotationCorrection();
 
         //TODO: GAMEPAD1 CONTROLS (DRIVER)
 
-        // Drive controls
         if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1) {
-            // Normal driving
+            // normal driving
             bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_bumper) {
-            // Slow mode
+            // slow
             bob.motorDriveXYVectors(0.7 * -gamepad1.left_stick_x, 0.7 * gamepad1.left_stick_y, 0.3 * -gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_trigger > 0.1) {
-            // Limelight auto-rotation mode - hold right trigger to align with target
+            // limelight
             rotationCorrectionOn = true;
             bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, rotationPower);
 
-            // Haptic feedback when aligned
-            if (rotationPID.isFinished()) {
-                gamepad1.rumble(100);
-            }
         }
 
         //shooting all 3 balls
@@ -137,14 +130,10 @@ public class MacroTeleOp extends OpMode {
     private void updateRotationCorrection() {
         if (rotationCorrectionOn) {
             LLResult result = limelight.getLatestResult();
-
             if (result != null && result.isValid()) {
-                // Get horizontal angle offset from limelight (tx)
                 currentAngle = Math.toRadians(result.getTx());
                 rotationPower = rotationPID.tick(currentAngle);
-
             } else {
-                // No valid target detected
                 rotationPower = 0;
             }
         } else {
