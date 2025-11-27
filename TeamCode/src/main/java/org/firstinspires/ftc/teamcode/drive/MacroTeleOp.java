@@ -16,6 +16,7 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_OF
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_MATIC;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE2;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE2_MATIC;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_LEFT;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
@@ -89,6 +90,7 @@ public class MacroTeleOp extends OpMode {
         //shooting all 3 balls
         if (gamepad1.y && !lastGamepad1.y) bob.runMacro(SHOOT_ALL_THREE);
         if (gamepad1.left_bumper && !lastGamepad1.left_bumper) bob.runMacro(SHOOTER_ZONE1_MATIC);
+        if (gamepad1.dpad_up && !lastGamepad1.dpad_up) bob.runMacro(SHOOTER_ZONE2_MATIC);
 
         //intake in
         if (gamepad1.a) bob.intakeController.intake();
