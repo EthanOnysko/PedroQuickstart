@@ -53,10 +53,10 @@ public class LimeLightLocalization extends OpMode {
     // runs on init press
     public void init() {
         // define and init robot
-        motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("leftFront");
-        motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("leftBack");
-        motorFrontRight = (DcMotorEx) hardwareMap.dcMotor.get("rightFront");
-        motorBackRight = (DcMotorEx) hardwareMap.dcMotor.get("rightBack");
+        motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("fl");
+        motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("bl");
+        motorFrontRight = (DcMotorEx) hardwareMap.dcMotor.get("fr");
+        motorBackRight = (DcMotorEx) hardwareMap.dcMotor.get("br");
 
         motorFrontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBackLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
