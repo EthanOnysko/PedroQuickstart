@@ -29,7 +29,7 @@ public class TestAuto extends OpMode {
                 .build();
     }
 
-    
+
 
     public void autonomousPathUpdate() {
         switch (pathState) {
