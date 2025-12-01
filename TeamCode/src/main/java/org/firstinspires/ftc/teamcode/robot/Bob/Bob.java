@@ -51,9 +51,6 @@ public class Bob extends Meccanum implements Robot {
     // Pedro Pathing
     public Follower follower;
 
-    // Voltage sensor
-    private VoltageSensor vs;
-
     public Telemetry tele;
     public boolean inited = false;
     public ElapsedTime runtime = new ElapsedTime();
@@ -61,8 +58,6 @@ public class Bob extends Meccanum implements Robot {
     @Override
     public void init(HardwareMap hardwareMap) {
         super.init(hardwareMap);
-
-        vs = hardwareMap.voltageSensor.get("Control Hub");
 
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("fl");
         motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("bl");
@@ -115,7 +110,6 @@ public class Bob extends Meccanum implements Robot {
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
-
     }
 
     // TODO: SHOOTER SHIT

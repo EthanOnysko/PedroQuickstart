@@ -170,7 +170,6 @@ public class LimeLightLocalization extends OpMode {
                     double PyInches = -LPyInches+72;
 
 
-                    // Keep Pedro follower in sync
                     boolean clearView = true;
 
                     if (lastRecolaized.seconds() >= wait) {

@@ -47,6 +47,21 @@ public class Macros {
     public static final BobState INTAKE_STOP = new BobState(null, null, null, INTAKE_POWER_OFF, null);
 
 
+
+    public static final BobState INTAKE_THEN_SPIN2 = new BobState(null, 120.0, null, INTAKE_POWER_OFF, null);
+
+    public static final BobState INTAKE_THEN_SPIN = new BobState(null, null, null, INTAKE_POWER_IN, new LinkedState(Link.LinkType.WAIT, 260, INTAKE_THEN_SPIN2));
+
+
+
+
+
+
+
+
+
+
+
     public static final BobState READY_TO_SHOOT_ZONE1 = new BobState(
             RPM_ZONE1,
             null,
