@@ -1,51 +1,66 @@
-package org.firstinspires.ftc.teamcode.pedroPathing; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.drive.autos;
 
-import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.testy;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
-import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
-@Autonomous(name = "Example Auto", group = "Examples")
-public class TestAuto extends OpMode {
-
+@Autonomous
+public class spinAuto extends OpMode {
     Bob bob = new Bob();
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
 
-    private final Pose startPose = new Pose(134.5, 134.5, Math.toRadians(270)); // Start Pose of our robot.
+    private boolean test = false;
+    private boolean test2 = false;
+    private final Pose startPose = new Pose(72, 72, Math.toRadians(0)); // Start Pose of our robot.
+    public PathChain Path1;
+    public PathChain Path2;
 
-    private PathChain Path1;
     public void buildPaths() {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(134.500, 137.000), new Pose(88.093, 55.570))
+                        new BezierLine(new Pose(72, 72), new Pose(90, 72))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(45))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
-    }
 
-    public void autonomousPathUpdate() {
+
+    }public void autonomousPathUpdate() {
         switch (pathState) {
             case 0:
                 follower.followPath(Path1);
+
+                setPathState(1);
+                break;
+
+            case 1:
                 if (!follower.isBusy()) {
-                    bob.runMacro(SPINDEXER_RIGHT);
-                    setPathState(-1);
+                    if (!test2){
+                        test = true;
+                        break;
+                    }
+
+                    setPathState(-1); // done
                 }
                 break;
         }
     }
+
 
     /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
     public void setPathState(int pState) {
@@ -57,15 +72,21 @@ public class TestAuto extends OpMode {
     public void loop() {
 
         // These loop the movements of the robot, these must be called continuously in order to work
-        follower.update();
-        autonomousPathUpdate();
+//
+//        if (!test){
+//            autonomousPathUpdate();
+//            follower.update();
+//        }
+
+        if (test) {
+            bob.runMacro(SHOOT_ALL_THREE);
+            test = false;
+        }
         bob.tick();
 
-        // Feedback to Driver Hub for debugging
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("spincoder ticks", bob.spincoder.getCurrentPosition());
+        telemetry.addData("spindexer power", bob.spindexer.getPower());
+        telemetry.addData("MACROING", bob.MACROING);
         telemetry.update();
     }
 
@@ -75,17 +96,21 @@ public class TestAuto extends OpMode {
         pathTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
-        bob.init(hardwareMap);
+
 
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
+        bob.init(hardwareMap);
 
     }
 
     /** This method is called continuously after Init while waiting for "play". **/
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+
+
+    }
 
     /** This method is called once at the start of the OpMode.
      * It runs all the setup actions, including building paths and starting the path system **/
@@ -93,8 +118,6 @@ public class TestAuto extends OpMode {
     public void start() {
         opmodeTimer.resetTimer();
         setPathState(0);
-        bob.transferController.setDown();
-
 
     }
 

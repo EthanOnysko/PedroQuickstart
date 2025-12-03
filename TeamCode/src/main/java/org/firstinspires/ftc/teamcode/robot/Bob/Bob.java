@@ -104,7 +104,7 @@ public class Bob extends Meccanum implements Robot {
     }
 
     public void tick() {
-        if (follower != null) follower.update();
+      //  if (follower != null) follower.update();
         tickMacros();
         shooterController.shooterTick();
         spindexerController.spindexerTick();
@@ -337,17 +337,25 @@ public class Bob extends Meccanum implements Robot {
         MACROING = false;
         macroTimeout = INFINITY;
     }
-
     public void tickMacros() {
-        if (macroTimer.milliseconds() > macroTimeout) {
+        if (!MACROING && macroTimer.milliseconds() > macroTimeout && macroTimeout != INFINITY) {
             macroTimeout = INFINITY;
             MACROING = true;
         }
 
         if (MACROING) {
             BobState m = macroState;
+
             if (m.shooterRPM != null) shooterController.setRPM(m.shooterRPM);
-            if (m.spindexerAngle != null) spindexerController.incrementAngle(m.spindexerAngle);
+
+            // Handle spindexer angle - absolute or increment
+            if (m.spindexerAngle != null) {
+                if (m.spindexerAbsolute != null && m.spindexerAbsolute) {
+                    spindexerController.setTargetAngle(m.spindexerAngle);  // Absolute
+                } else {
+                    spindexerController.incrementAngle(m.spindexerAngle);  // Increment (default)
+                }
+            }
 
             if (m.transferPosition != null) {
                 if (m.transferPosition == TRANSFER_UP) {
@@ -356,6 +364,7 @@ public class Bob extends Meccanum implements Robot {
                     transferController.setDown();
                 }
             }
+
             if (m.intakePower != null) {
                 if (m.intakePower == INTAKE_POWER_IN) {
                     intakeController.intake();
@@ -366,17 +375,54 @@ public class Bob extends Meccanum implements Robot {
                 }
             }
 
-            if (m.linkedState != null) {
-                if (m.linkedState.type == Link.LinkType.WAIT) {
-                    macroTimer.reset();
-                    macroTimeout = m.linkedState.trigger;
-                    macroState = m.linkedState.nextState;
-                    macroState = m.linkedState.nextState;
-                }
+            if (m.linkedState != null && m.linkedState.type == Link.LinkType.WAIT) {
+                macroTimer.reset();
+                macroTimeout = m.linkedState.trigger;
+                macroState = m.linkedState.nextState;
             }
+
             MACROING = false;
         }
     }
+//    public void tickMacros() {
+//        if (macroTimer.milliseconds() > macroTimeout) {
+//            macroTimeout = INFINITY;
+//            MACROING = true;
+//        }
+//
+//        if (MACROING) {
+//            BobState m = macroState;
+//            if (m.shooterRPM != null) shooterController.setRPM(m.shooterRPM);
+//            if (m.spindexerAngle != null) spindexerController.incrementAngle(m.spindexerAngle);
+//
+//            if (m.transferPosition != null) {
+//                if (m.transferPosition == TRANSFER_UP) {
+//                    transferController.setUp();
+//                } else {
+//                    transferController.setDown();
+//                }
+//            }
+//            if (m.intakePower != null) {
+//                if (m.intakePower == INTAKE_POWER_IN) {
+//                    intakeController.intake();
+//                } else if (m.intakePower == INTAKE_POWER_OUT) {
+//                    intakeController.outtake();
+//                } else {
+//                    intakeController.stopIntake();
+//                }
+//            }
+//
+//            if (m.linkedState != null) {
+//                if (m.linkedState.type == Link.LinkType.WAIT) {
+//                    macroTimer.reset();
+//                    macroTimeout = m.linkedState.trigger;
+//                    macroState = m.linkedState.nextState;
+//                    macroState = m.linkedState.nextState;
+//                }
+//            }
+//            MACROING = false;
+//        }
+//    }
 
     public void tickWithMacros() {
         if (follower != null) follower.update();
