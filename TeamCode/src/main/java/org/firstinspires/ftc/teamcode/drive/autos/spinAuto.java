@@ -50,10 +50,7 @@ public class spinAuto extends OpMode {
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (!test2){
-                        test = true;
-                        break;
-                    }
+                    bob.runMacro(SHOOT_ALL_THREE);
 
                     setPathState(-1); // done
                 }
@@ -72,16 +69,14 @@ public class spinAuto extends OpMode {
     public void loop() {
 
         // These loop the movements of the robot, these must be called continuously in order to work
-//
-//        if (!test){
-//            autonomousPathUpdate();
-//            follower.update();
-//        }
 
-        if (test) {
-            bob.runMacro(SHOOT_ALL_THREE);
-            test = false;
-        }
+
+            autonomousPathUpdate();
+            follower.update();
+
+
+
+
         bob.tick();
 
         telemetry.addData("spincoder ticks", bob.spincoder.getCurrentPosition());

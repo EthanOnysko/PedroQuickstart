@@ -85,7 +85,7 @@ public class Bob extends Meccanum implements Robot {
         intake.setZeroPowerBehavior(BRAKE);
 
         spindexer = hardwareMap.get(CRServo.class, "spindexer");
-        spincoder = hardwareMap.get(DcMotorEx.class, "bl"); // Using back left as encoder
+        spincoder = hardwareMap.get(DcMotorEx.class, "spincoder"); // Using back left as encoder
         spincoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spincoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
