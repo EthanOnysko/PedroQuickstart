@@ -60,11 +60,13 @@ public class Macros {
     public static final BobState testy = new BobState(RPM_ZONE1, null, null,null,null, new LinkedState(Link.LinkType.WAIT, 1000, testy2));
 
 
-    public static final BobState INTAKE_THEN_SPIN2 = new BobState(null, 120.0,null, null, INTAKE_POWER_OFF, null);
 
-    public static final BobState INTAKE_THEN_SPIN = new BobState(null, null, null,null, INTAKE_POWER_IN, new LinkedState(Link.LinkType.WAIT, 260, INTAKE_THEN_SPIN2));
-
-
+    //intake macro
+    public static final BobState INTAKE_THEN_SPIN5 = new BobState(null, 60.0,null, null, null, null);
+    public static final BobState INTAKE_THEN_SPIN4 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,1000,INTAKE_THEN_SPIN5));
+    public static final BobState INTAKE_THEN_SPIN3 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,1000,INTAKE_THEN_SPIN4));
+    public static final BobState INTAKE_THEN_SPIN2 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,1000,INTAKE_THEN_SPIN3));
+    public static final BobState INTAKE_THEN_SPIN = new BobState(null, null, null,null, INTAKE_POWER_IN, new LinkedState(Link.LinkType.WAIT, 1000, INTAKE_THEN_SPIN2));
 
 
 
