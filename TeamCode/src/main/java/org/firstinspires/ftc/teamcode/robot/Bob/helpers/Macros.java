@@ -4,13 +4,13 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.*;
 
 public class Macros {
     // In Macros.java - Auto versions with absolute angles
-    public static final BobState SHOOT_ALL_THREE_AUTO_FINAL = new BobState(0, 60.0, true, null, null, null);
+    public static final BobState SHOOT_ALL_THREE_AUTO_FINAL = new BobState(null, 60.0, true, null, null, null);
     public static final BobState SHOOT_ALL_THREE_AUTO8 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO_FINAL));
     public static final BobState SHOOT_ALL_THREE_AUTO7 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO8));
-    public static final BobState SHOOT_ALL_THREE_AUTO6 = new BobState(null, 240.0, true, null, null, new LinkedState(Link.LinkType.WAIT, 400, SHOOT_ALL_THREE_AUTO7));  // Absolute 240°
+    public static final BobState SHOOT_ALL_THREE_AUTO6 = new BobState(null, 240.0, true, null, null, new LinkedState(Link.LinkType.WAIT, 500, SHOOT_ALL_THREE_AUTO7));  // Absolute 240°
     public static final BobState SHOOT_ALL_THREE_AUTO5 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO6));
     public static final BobState SHOOT_ALL_THREE_AUTO4 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO5));
-    public static final BobState SHOOT_ALL_THREE_AUTO3 = new BobState(null, 120.0, true, null, null, new LinkedState(Link.LinkType.WAIT, 400, SHOOT_ALL_THREE_AUTO4));  // Absolute 120°
+    public static final BobState SHOOT_ALL_THREE_AUTO3 = new BobState(null, 120.0, true, null, null, new LinkedState(Link.LinkType.WAIT, 500, SHOOT_ALL_THREE_AUTO4));  // Absolute 120°
     public static final BobState SHOOT_ALL_THREE_AUTO2 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO3));
     public static final BobState SHOOT_ALL_THREE_AUTO = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO2));
 
@@ -62,11 +62,10 @@ public class Macros {
 
 
     //intake macro
-    public static final BobState INTAKE_THEN_SPIN5 = new BobState(null, 60.0,null, null, null, null);
-    public static final BobState INTAKE_THEN_SPIN4 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,1000,INTAKE_THEN_SPIN5));
-    public static final BobState INTAKE_THEN_SPIN3 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,1000,INTAKE_THEN_SPIN4));
-    public static final BobState INTAKE_THEN_SPIN2 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,1000,INTAKE_THEN_SPIN3));
-    public static final BobState INTAKE_THEN_SPIN = new BobState(null, null, null,null, INTAKE_POWER_IN, new LinkedState(Link.LinkType.WAIT, 1000, INTAKE_THEN_SPIN2));
+    public static final BobState INTAKE_THEN_SPIN4 = new BobState(null, 60.0,null, null, INTAKE_POWER_OFF,null);
+    public static final BobState INTAKE_THEN_SPIN3 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,750,INTAKE_THEN_SPIN4));
+    public static final BobState INTAKE_THEN_SPIN2 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,750,INTAKE_THEN_SPIN3));
+    public static final BobState INTAKE_THEN_SPIN = new BobState(null, null, null,null, INTAKE_POWER_IN-.1, new LinkedState(Link.LinkType.WAIT, 600, INTAKE_THEN_SPIN2));
 
 
 
