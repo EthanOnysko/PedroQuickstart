@@ -8,7 +8,7 @@ public class BobConstants {
     public static double TICKS_PER_REV_SHOOTER = 28;
 
     // Shooter RPM presets
-    public static int RPM_ZONE1 = 2500;
+    public static int RPM_ZONE1 = 2450;
     public static int RPM_ZONE2 = 3000;
     public static int RPM_OFF = 0;
 
@@ -43,8 +43,8 @@ public class BobConstants {
     public static double TRANSFER_PULSE_TIME = 300; // milliseconds
 
     // ==================== INTAKE ====================
-    public static double INTAKE_POWER_IN = -0.7;
-    public static double INTAKE_POWER_OUT = 0.7;
+    public static double INTAKE_POWER_IN = -0.65;
+    public static double INTAKE_POWER_OUT = 0.65;
     public static double INTAKE_POWER_OFF = 0;
 
     // ==================== DRIVE ====================

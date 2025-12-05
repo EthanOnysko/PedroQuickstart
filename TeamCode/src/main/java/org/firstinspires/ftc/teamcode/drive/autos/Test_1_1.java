@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.autos;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_SIXTY;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -38,6 +39,7 @@ public class Test_1_1 extends OpMode {
     public PathChain Path3_5_5;
     public PathChain Path4;
 
+    public PathChain Path3_2_5;
     public void buildPaths() {
 
 
@@ -55,7 +57,7 @@ public class Test_1_1 extends OpMode {
                         new BezierCurve(
                                 new Pose(72.123, 71.877),
                                 new Pose(83.938, 82.708),
-                                new Pose(104.123, 83.692)
+                                new Pose(95, 83.692)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
@@ -65,19 +67,20 @@ public class Test_1_1 extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(104.123, 83.692),
-                                new Pose(108, 83.692)
+                                new Pose(95, 83.692),
+                                new Pose(107, 83.692)
                         )
                 )
 
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
+
         Path3_5 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(108, 83.692),
-                                new Pose(114, 83.692)
+                                new Pose(107, 83.692),
+                                new Pose(112, 83.692)
                         )
                 )
 
@@ -87,8 +90,8 @@ public class Test_1_1 extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                new Pose(114, 83.692),
-                                new Pose(122.338, 83.692)
+                                new Pose(112, 83.692),
+                                new Pose(117, 83.692)
                         )
                 )
 
@@ -99,7 +102,7 @@ public class Test_1_1 extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(122.338, 83.692),
+                                new Pose(117, 83.692),
                                 new Pose(89.600, 83.446),
                                 new Pose(72.123, 72.123)
                         )
@@ -135,11 +138,12 @@ public class Test_1_1 extends OpMode {
     public void intakeSpikeMarks() {
         switch (intakeState) {
             case 0:
-                follower.followPath(Path3);
+                follower.followPath(Path3,.5,true);
                 setI(1);
                 break;
 
             case 1:
+//                follower.followPath(Path3_2_5);
                 if (!follower.isBusy()) {
                     if (prox < 10){
                         bob.runMacro(SPINDEXER_RIGHT);
@@ -153,27 +157,32 @@ public class Test_1_1 extends OpMode {
                 waitSpike(.5);
                 break;
             case 3:
-                follower.followPath(Path3_5);
+                follower.followPath(Path3_5,.5,true);
                 setI(4);
+                actionTimer.resetTimer();
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (prox < 10){
+                    if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(5);
                     }
                 }
                 break;
             case 6:
-                follower.followPath(Path3_5_5);
+                follower.followPath(Path3_5_5,.5,true);
                 setI(7);
+                actionTimer.resetTimer();
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    setP(pathState+1);
-                    setI(-1);
-                }
+                    if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
+                        bob.intakeController.stopIntake();
+                        pathState = 7;
+                        setI(-1);
+                    }
 
+                }
                 break;
 
         }
@@ -200,25 +209,43 @@ public class Test_1_1 extends OpMode {
             case 3:
 
                 follower.followPath(Path2);
+                bob.intakeController.intake();
                 setP(4);
 
                 break;
 
             case 4:
+                if (!follower.isBusy()){
+                    waitThenRun(.5);
+                }
+
+                break;
+            case 5:
                 intakeSpikeMarks();
                 break;
+
+
             case 7:
                 if (!follower.isBusy()) {
-                    follower.followPath(Path4);
+                    bob.runMacro(SPINDEXER_SIXTY);
+                    follower.followPath(Path4,1,true);
                     setP(8);
 
                 }
                 break;
             case 8:
                 if (!follower.isBusy()) {
-                    bob.runMacro(SHOOT_ALL_THREE_AUTO);
-                    setP(-1);
+                    setP(9);
                 }
+                break;
+            case 9:
+                   waitThenRun(.5);
+
+                break;
+            case 10:
+                bob.runMacro(SHOOT_ALL_THREE_AUTO);
+                setP(-1);
+
                 break;
 
             default:
@@ -251,10 +278,11 @@ public class Test_1_1 extends OpMode {
 
         bigTick();
 
-        telemetry.addData("path state", pathState);
-        telemetry.addData("x", follower.getPose().getX());
-        telemetry.addData("y", follower.getPose().getY());
-        telemetry.addData("heading", follower.getPose().getHeading());
+        telemetry.addData("prox: ", prox);
+//        telemetry.addData("path state", pathState);
+//        telemetry.addData("x", follower.getPose().getX());
+//        telemetry.addData("y", follower.getPose().getY());
+//        telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
 
     }
