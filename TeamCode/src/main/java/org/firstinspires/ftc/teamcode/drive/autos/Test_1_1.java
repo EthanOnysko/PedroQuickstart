@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive.autos;
 
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
-import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.testy;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -9,33 +10,58 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
 @Autonomous
-public class forward extends OpMode {
+public class Test_1_1 extends OpMode {
     Bob bob = new Bob();
+
+    private boolean waiting = false;
+
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
-    private boolean waiting = false;
+    private int intakeState = 0;
+    private boolean waiting2 = false;
     private double prox;
+    private final Pose startPose = new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)); // Start Pose of our robot.
 
-    private final Pose startPose = new Pose(104.123, 83.692, Math.toRadians(0)); // Start Pose of our robot.
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
+    public PathChain Path3_5;
+    public PathChain Path3_5_5;
     public PathChain Path4;
 
-
     public void buildPaths() {
+
+
         Path1 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(86.646, 9.354), new Pose(72.123, 71.877))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
+                .build();
+
+        Path2 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(72.123, 71.877),
+                                new Pose(83.938, 82.708),
+                                new Pose(104.123, 83.692)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .build();
+
+        Path3 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
@@ -46,7 +72,7 @@ public class forward extends OpMode {
 
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
-        Path2 = follower
+        Path3_5 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
@@ -57,7 +83,7 @@ public class forward extends OpMode {
 
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
-        Path3 = follower
+        Path3_5_5 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
@@ -68,19 +94,32 @@ public class forward extends OpMode {
 
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
+
         Path4 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(
+                        new BezierCurve(
                                 new Pose(122.338, 83.692),
-                                new Pose(128, 83.692)
+                                new Pose(89.600, 83.446),
+                                new Pose(72.123, 72.123)
                         )
                 )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
 
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
 
+    }
+
+    public void waitSpike(double seconds){
+        if (!waiting2) {
+            actionTimer.resetTimer();
+            waiting2 = true;
+        }
+        if (seconds == 0 || actionTimer.getElapsedTimeSeconds() > seconds) {
+            waiting2 = false;
+            setI(intakeState + 1);
+        }
     }
     public void waitThenRun(double seconds){
         if (!waiting) {
@@ -89,112 +128,164 @@ public class forward extends OpMode {
         }
         if (seconds == 0 || actionTimer.getElapsedTimeSeconds() > seconds) {
             waiting = false;
-            setPathState(pathState + 1);
+            setP(getP() + 1);
         }
     }
-    public void autonomousPathUpdate() {
-        switch (pathState) {
+
+    public void intakeSpikeMarks() {
+        switch (intakeState) {
             case 0:
-                follower.followPath(Path1);
-                setPathState(1);
+                follower.followPath(Path3);
+                setI(1);
                 break;
 
             case 1:
                 if (!follower.isBusy()) {
                     if (prox < 10){
                         bob.runMacro(SPINDEXER_RIGHT);
-                        setPathState(2);
+                        setI(2);
                     }
 
                 }
                 break;
             case 2:
-                waitThenRun(.5);
+            case 5:
+                waitSpike(.5);
                 break;
             case 3:
-                follower.followPath(Path2);
-                setPathState(4);
+                follower.followPath(Path3_5);
+                setI(4);
                 break;
             case 4:
                 if (!follower.isBusy()) {
                     if (prox < 10){
                         bob.runMacro(SPINDEXER_RIGHT);
-                        setPathState(5);
+                        setI(5);
                     }
                 }
                 break;
-            case 5:
-                waitThenRun(.5);
-                break;
             case 6:
-                follower.followPath(Path3);
-                setPathState(7);
+                follower.followPath(Path3_5_5);
+                setI(7);
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    setPathState(-1);
+                    setP(pathState+1);
+                    setI(-1);
                 }
 
                 break;
 
         }
     }
+    public void autoMain() {
+        switch (pathState) {
+            case 0:
+                follower.followPath(Path1);
+                setP(1);
+                break;
 
+            case 1:
+                if (!follower.isBusy()) {
+                    bob.runMacro(SHOOT_ALL_THREE_AUTO);
+                    setP(2);
+                }
+                break;
+            case 2:
 
-    /** These change the states of the paths and actions. It will also reset the timers of the individual switches **/
-    public void setPathState(int pState) {
-        pathState = pState;
-        pathTimer.resetTimer();
+                waitThenRun(2.4);
+
+                break;
+
+            case 3:
+
+                follower.followPath(Path2);
+                setP(4);
+
+                break;
+
+            case 4:
+                intakeSpikeMarks();
+                break;
+            case 7:
+                if (!follower.isBusy()) {
+                    follower.followPath(Path4);
+                    setP(8);
+
+                }
+                break;
+            case 8:
+                if (!follower.isBusy()) {
+                    bob.runMacro(SHOOT_ALL_THREE_AUTO);
+                    setP(-1);
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 
 
+
+    public void setI(int i) {
+        intakeState = i;
+    }
+
+    public void setP(int p) {
+        pathState = p;
+        pathTimer.resetTimer();
+    }
+    public int getP() {
+        return pathState;
+    }
+
+    public void bigTick(){
+        prox = bob.c.getDistance(DistanceUnit.MM);
+        follower.update();
+        autoMain();
+        bob.tick();
+    }
     @Override
     public void loop() {
 
-        prox = bob.c.getDistance(DistanceUnit.MM);
-        follower.update();
-        autonomousPathUpdate();
-        bob.tick();
-
+        bigTick();
 
         telemetry.addData("path state", pathState);
         telemetry.addData("x", follower.getPose().getX());
         telemetry.addData("y", follower.getPose().getY());
         telemetry.addData("heading", follower.getPose().getHeading());
         telemetry.update();
+
     }
 
-    /** This method is called once at the init of the OpMode. **/
     @Override
     public void init() {
         pathTimer = new Timer();
+        actionTimer = new Timer();
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
-        actionTimer = new Timer();
-
+        bob.init(hardwareMap);
 
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
         follower.setStartingPose(startPose);
-        bob.init(hardwareMap);
-        bob.intakeController.intake();
 
     }
 
     /** This method is called continuously after Init while waiting for "play". **/
     @Override
-    public void init_loop() {
-
-
-    }
+    public void init_loop() {}
 
     /** This method is called once at the start of the OpMode.
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
-        opmodeTimer.resetTimer();
-        setPathState(0);
+        bob.transferController.setDown();
+        bob.runMacro(SHOOTER_ZONE1);
 
+        opmodeTimer.resetTimer();
+        setP(0);
     }
 
     /** We do not use this because everything should automatically disable **/

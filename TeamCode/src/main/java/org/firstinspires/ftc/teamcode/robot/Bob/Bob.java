@@ -10,11 +10,14 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.I2cDevice;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -36,7 +39,7 @@ public class Bob extends Meccanum implements Robot {
     public SpindexerController spindexerController = new SpindexerController();
     public IntakeController intakeController = new IntakeController();
     public TransferController transferController = new TransferController();
-
+    public RevColorSensorV3 c;
     // Motors
     public DcMotorEx intake;
     public DcMotorEx shooterRight;
@@ -64,6 +67,7 @@ public class Bob extends Meccanum implements Robot {
         motorFrontRight = (DcMotorEx) hardwareMap.dcMotor.get("fr");
         motorBackRight = (DcMotorEx) hardwareMap.dcMotor.get("br");
 
+
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -83,6 +87,9 @@ public class Bob extends Meccanum implements Robot {
 
         intake = (DcMotorEx) hardwareMap.dcMotor.get("intake");
         intake.setZeroPowerBehavior(BRAKE);
+
+
+        c = hardwareMap.get(RevColorSensorV3.class, "color");
 
         spindexer = hardwareMap.get(CRServo.class, "spindexer");
         spincoder = hardwareMap.get(DcMotorEx.class, "spincoder"); // Using back left as encoder
