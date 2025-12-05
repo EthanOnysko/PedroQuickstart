@@ -67,12 +67,12 @@ public class Macros {
     public static final BobState INTAKE_THEN_SPIN10 = new BobState(null, 120.0,null, null, null,new LinkedState(Link.LinkType.WAIT,750, INTAKE_THEN_SPIN11));
     public static final BobState INTAKE_THEN_SPIN9 = new BobState(null, 60.0,null, null, INTAKE_POWER_IN-.1,new LinkedState(Link.LinkType.WAIT,750, INTAKE_THEN_SPIN10));
     //spike mark 2
-    public static final BobState INTAKE_THEN_SPIN8 = new BobState(null, 60.0,null, null, INTAKE_POWER_OFF,new LinkedState(Link.LinkType.WAIT,5000, INTAKE_THEN_SPIN9));
+    public static final BobState INTAKE_THEN_SPIN8 = new BobState(null, 60.0,null, null, INTAKE_POWER_OFF,new LinkedState(Link.LinkType.WAIT,9000, INTAKE_THEN_SPIN9));
     public static final BobState INTAKE_THEN_SPIN7 = new BobState(null, 120.0,null, null, null,new LinkedState(Link.LinkType.WAIT,750, INTAKE_THEN_SPIN8));
     public static final BobState INTAKE_THEN_SPIN6 = new BobState(null, 120.0,null, null, null,new LinkedState(Link.LinkType.WAIT,750, INTAKE_THEN_SPIN7));
     public static final BobState INTAKE_THEN_SPIN5 = new BobState(null, 60.0,null, null, INTAKE_POWER_IN-.1,new LinkedState(Link.LinkType.WAIT,750, INTAKE_THEN_SPIN6));
     //spike mark 1
-    public static final BobState INTAKE_THEN_SPIN4 = new BobState(null, 60.0,null, null, INTAKE_POWER_OFF,new LinkedState(Link.LinkType.WAIT,5000, INTAKE_THEN_SPIN5));
+    public static final BobState INTAKE_THEN_SPIN4 = new BobState(null, 60.0,null, null, INTAKE_POWER_OFF,new LinkedState(Link.LinkType.WAIT,9000, INTAKE_THEN_SPIN5));
     public static final BobState INTAKE_THEN_SPIN3 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,750,INTAKE_THEN_SPIN4));
     public static final BobState INTAKE_THEN_SPIN2 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT,750,INTAKE_THEN_SPIN3));
     public static final BobState INTAKE_THEN_SPIN = new BobState(null, null, null,null, INTAKE_POWER_IN-.1, new LinkedState(Link.LinkType.WAIT, 600, INTAKE_THEN_SPIN2));
