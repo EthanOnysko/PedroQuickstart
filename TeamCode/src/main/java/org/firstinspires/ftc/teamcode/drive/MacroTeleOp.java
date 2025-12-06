@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.helpers.PID;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.INTAKE_POWER_IN;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.INTAKE_IN;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.INTAKE_OUT;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.INTAKE_STOP;
@@ -29,11 +32,13 @@ import java.util.LinkedList;
 public class MacroTeleOp extends OpMode {
 
     Bob bob = new Bob();
-    Limelight3A limelight;
 
+    Limelight3A limelight;
+    private Timer pathTimer, actionTimer, opmodeTimer;
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();
     Deque<Gamepad> gamepad1History = new LinkedList<>(), gamepad2History = new LinkedList<>();
-
+    private double prox;
+    private boolean autoSpin = false;
     private PID rotationPID = new PID(2,0,.05);
     private boolean rotationCorrectionOn = false;
     private double rotationPower = 0;
@@ -52,6 +57,7 @@ public class MacroTeleOp extends OpMode {
         rotationPID.init(0);
         rotationPID.setTarget(rotationTarget);
         rotationPID.setDoneThresholds(rotationErrorThresh, rotationDerivativeThresh);
+        actionTimer = new Timer();
     }
 
     @Override
@@ -65,10 +71,27 @@ public class MacroTeleOp extends OpMode {
     @Override
     public void loop() {
         if (gamepad2.start || gamepad1.start) return;
-
+        prox = bob.c.getDistance(DistanceUnit.MM);
         updateRotationCorrection();
 
         //TODO: GAMEPAD1 CONTROLS (DRIVER)
+
+//        if (gamepad2.x && !lastGamepad2.x) {
+//            if (transfer) {
+//                bob.transferController.setUp();
+//                transfer = !transfer;
+//            }
+//            if (!transfer){
+//                bob.transferController.setDown();
+//            }
+//        }
+            if (prox < 15 &&
+                    bob.intakeController.getIntake() == INTAKE_POWER_IN &&
+                    actionTimer.getElapsedTimeSeconds() > .5
+            ){
+                actionTimer.resetTimer();
+                bob.runMacro(SPINDEXER_RIGHT);
+            }
 
         if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1) {
             // normal driving
@@ -86,6 +109,7 @@ public class MacroTeleOp extends OpMode {
             bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, rotationPower);
 
         }
+
 
         //shooting all 3 balls
         if (gamepad1.y && !lastGamepad1.y) bob.runMacro(SHOOT_ALL_THREE);

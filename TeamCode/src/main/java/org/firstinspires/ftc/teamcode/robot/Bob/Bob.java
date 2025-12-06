@@ -253,6 +253,9 @@ public class Bob extends Meccanum implements Robot {
         public void intake() {
             intakePower = INTAKE_POWER_IN;
         }
+        public double getIntake(){
+            return intakePower;
+        }
 
         public void outtake() {
             intakePower = INTAKE_POWER_OUT;

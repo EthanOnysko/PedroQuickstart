@@ -24,6 +24,7 @@ public class Test_1_1 extends OpMode {
 
     private boolean waiting = false;
 
+    private boolean isSpike1 = true;
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
@@ -38,6 +39,12 @@ public class Test_1_1 extends OpMode {
     public PathChain Path3_5;
     public PathChain Path3_5_5;
     public PathChain Path4;
+    public PathChain SpikeMark2;
+    public PathChain SpikeMark21;
+    public PathChain SpikeMark22;
+    public PathChain SpikeMark23;
+    public PathChain SpikeMark24;
+    public PathChain park;
 
     public PathChain Path3_2_5;
     public void buildPaths() {
@@ -110,6 +117,53 @@ public class Test_1_1 extends OpMode {
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
 
                 .build();
+        SpikeMark2 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(72.123, 72.123), new Pose(95.000, 60.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .build();
+
+        SpikeMark21 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(95.000, 60.000), new Pose(107.000, 60.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+                .build();
+
+        SpikeMark22 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(107.000, 60.000), new Pose(112.000, 60.000))
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        SpikeMark23 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(112.000, 60.000), new Pose(117.000, 60.000))
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+
+        SpikeMark24 = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(117.000, 60.000), new Pose(72.000, 72.000))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
+                .build();
+        park = follower
+                .pathBuilder()
+                .addPath(
+                        new BezierLine(new Pose(72, 72), new Pose(95, 37))
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .build();
+
 
 
     }
@@ -138,14 +192,14 @@ public class Test_1_1 extends OpMode {
     public void intakeSpikeMarks() {
         switch (intakeState) {
             case 0:
-                follower.followPath(Path3,.5,true);
+                if (isSpike1) follower.followPath(Path3,.5,true);
+                else follower.followPath(SpikeMark21,.5,true);
                 setI(1);
                 break;
 
             case 1:
-//                follower.followPath(Path3_2_5);
                 if (!follower.isBusy()) {
-                    if (prox < 10){
+                    if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(2);
                     }
@@ -157,7 +211,8 @@ public class Test_1_1 extends OpMode {
                 waitSpike(.5);
                 break;
             case 3:
-                follower.followPath(Path3_5,.5,true);
+                if (isSpike1) follower.followPath(Path3_5,.5,true);
+                else follower.followPath(SpikeMark22,.5,true);
                 setI(4);
                 actionTimer.resetTimer();
                 break;
@@ -170,7 +225,8 @@ public class Test_1_1 extends OpMode {
                 }
                 break;
             case 6:
-                follower.followPath(Path3_5_5,.5,true);
+                if (isSpike1) follower.followPath(Path3_5_5,.5,true);
+                else follower.followPath(SpikeMark23,.5,true);
                 setI(7);
                 actionTimer.resetTimer();
                 break;
@@ -178,7 +234,11 @@ public class Test_1_1 extends OpMode {
                 if (!follower.isBusy()) {
                     if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.intakeController.stopIntake();
-                        pathState = 7;
+                        if (isSpike1) {
+                            pathState = 7;
+                        } else {
+                            pathState = 15;
+                        }
                         setI(-1);
                     }
 
@@ -193,7 +253,6 @@ public class Test_1_1 extends OpMode {
                 follower.followPath(Path1);
                 setP(1);
                 break;
-
             case 1:
                 if (!follower.isBusy()) {
                     bob.runMacro(SHOOT_ALL_THREE_AUTO);
@@ -201,17 +260,14 @@ public class Test_1_1 extends OpMode {
                 }
                 break;
             case 2:
-
+            case 11:
                 waitThenRun(2.4);
-
                 break;
 
             case 3:
-
                 follower.followPath(Path2);
                 bob.intakeController.intake();
                 setP(4);
-
                 break;
 
             case 4:
@@ -221,6 +277,7 @@ public class Test_1_1 extends OpMode {
 
                 break;
             case 5:
+            case 14:
                 intakeSpikeMarks();
                 break;
 
@@ -243,10 +300,56 @@ public class Test_1_1 extends OpMode {
 
                 break;
             case 10:
-                bob.runMacro(SHOOT_ALL_THREE_AUTO);
-                setP(-1);
+                if (!follower.isBusy()) {
+                    bob.runMacro(SHOOT_ALL_THREE_AUTO);
+                    setP(11);
+                }
+                break;
+
+            case 12:
+                follower.followPath(SpikeMark2);
+                bob.intakeController.intake();
+                setP(13);
+                break;
+
+            case 13:
+                if (!follower.isBusy()){
+                    intakeState = 0;
+                    isSpike1 = false;
+                    waitThenRun(.5);
+                }
 
                 break;
+
+
+            case 15:
+                if (!follower.isBusy()) {
+                    bob.runMacro(SPINDEXER_SIXTY);
+                    follower.followPath(SpikeMark24,1,true);
+                    setP(16);
+
+                }
+                break;
+            case 16:
+                if (!follower.isBusy()) {
+                    setP(17);
+                }
+                break;
+            case 17:
+                waitThenRun(.5);
+
+                break;
+            case 18:
+                bob.runMacro(SHOOT_ALL_THREE_AUTO);
+                setP(19);
+
+                break;
+            case 19:
+                waitThenRun(2.5);
+                break;
+            case 20:
+                follower.followPath(park);
+                setP(-1);
 
             default:
                 break;
