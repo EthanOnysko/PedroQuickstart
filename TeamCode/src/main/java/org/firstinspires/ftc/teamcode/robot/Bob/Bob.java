@@ -3,30 +3,23 @@ package org.firstinspires.ftc.teamcode.robot.Bob;
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.BRAKE;
 import static com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior.FLOAT;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.*;
-import static java.lang.Math.*;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.Pose;
-import com.qualcomm.hardware.limelightvision.LLResult;
-import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.I2cDevice;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.helpers.PID;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.helpers.PIDShooter;
 import org.firstinspires.ftc.teamcode.helpers.PIDSpindexer;
 import org.firstinspires.ftc.teamcode.robot.Bob.Meccanum.Meccanum;
-import org.firstinspires.ftc.teamcode.robot.Bob.Robot;
 import org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobState;
 import org.firstinspires.ftc.teamcode.robot.Bob.helpers.Link;
 
@@ -35,10 +28,12 @@ public class Bob extends Meccanum implements Robot {
     protected HardwareMap hw = null;
 
     // Controllers
-    public ShooterController shooterController = new ShooterController();
+   // public ShooterController shooterController = new ShooterController();
     public SpindexerController spindexerController = new SpindexerController();
     public IntakeController intakeController = new IntakeController();
     public TransferController transferController = new TransferController();
+    public ProximityController proximityController = new ProximityController();
+    public NewShooterController newShooterController = new NewShooterController();
     public RevColorSensorV3 c;
     // Motors
     public DcMotorEx intake;
@@ -100,7 +95,7 @@ public class Bob extends Meccanum implements Robot {
 
         light = hardwareMap.get(Servo.class, "light");
 
-        shooterController.start();
+      //  shooterController.start();
         spindexerController.start();
         intakeController.start();
         transferController.start();
@@ -111,12 +106,13 @@ public class Bob extends Meccanum implements Robot {
     }
 
     public void tick() {
-      //  if (follower != null) follower.update();
         tickMacros();
-        shooterController.shooterTick();
+     //   shooterController.shooterTick();
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
+        proximityController.proximityTick();
+        newShooterController.update();
     }
 
     // TODO: SHOOTER SHIT
@@ -160,7 +156,15 @@ public class Bob extends Meccanum implements Robot {
             return targetRPM;
         }
     }
-
+    public class ProximityController {
+        private double prox;
+        public void proximityTick(){
+            prox = c.getDistance(DistanceUnit.MM);
+        }
+        public double getProx(){
+            return prox;
+        }
+    }
     // TODO: SPINDEXER SHIT
 
     public class SpindexerController {
@@ -181,35 +185,6 @@ public class Bob extends Meccanum implements Robot {
 
         public void incrementAngle(double increment) {
             setTargetAngle(targetAngle + increment);
-        }
-
-        public void nextPosition() {
-            incrementAngle(120);
-        }
-
-        public void previousPosition() {
-            incrementAngle(-120);
-        }
-
-        public void halfStep() {
-            incrementAngle(60);
-        }
-
-//        public void setE(boolean emergency) {
-//            emergencyMode = emergency;
-//            if (emergency) {
-//                spinPID.setConsts(SPINDEX_EMERGENCY_KP, SPINDEX_EMERGENCY_KI, SPINDEX_EMERGENCY_KD);
-//            } else {
-//                spinPID.setConsts(SPINDEX_KP, SPINDEX_KI, SPINDEX_KD);
-//            }
-//        }
-
-        public void updateLight() {
-            if (targetAngle % 120 == 0) {
-                light.setPosition(LIGHT_ON);
-            } else {
-                light.setPosition(LIGHT_OFF);
-            }
         }
 
         public void spindexerTick() {
@@ -239,7 +214,27 @@ public class Bob extends Meccanum implements Robot {
     }
 
 
+// TODO: NEW SHOOTER PID
 
+    public class NewShooterController {
+        private PIDShooter shootPID;
+        public void start() {
+            shootPID = new PIDShooter(TICKS_PER_REV_SHOOTER, SHOOTER_P, SHOOTER_I, SHOOTER_D);
+            shootPID.reset(0);
+        }
+
+        public void update(){
+            double currentTicks = (shooterLeft.getCurrentPosition() + shooterRight.getCurrentPosition()) / 2.0;
+            double power = shootPID.update(currentTicks);
+            shooterLeft.setPower(power);
+            shooterRight.setPower(power);
+            shootPID.setConsts(SHOOTER_P, SHOOTER_I, SHOOTER_D);
+        }
+        public void setRPM(double rpm) {
+            shootPID.setTargetRPM(rpm);
+        }
+
+    }
 
     // TODO: INTAKE SHIT
 
@@ -356,7 +351,7 @@ public class Bob extends Meccanum implements Robot {
         if (MACROING) {
             BobState m = macroState;
 
-            if (m.shooterRPM != null) shooterController.setRPM(m.shooterRPM);
+            if (m.shooterRPM != null) newShooterController.setRPM(m.shooterRPM);
 
             // Handle spindexer angle - absolute or increment
             if (m.spindexerAngle != null) {
@@ -394,53 +389,17 @@ public class Bob extends Meccanum implements Robot {
             MACROING = false;
         }
     }
-//    public void tickMacros() {
-//        if (macroTimer.milliseconds() > macroTimeout) {
-//            macroTimeout = INFINITY;
-//            MACROING = true;
-//        }
-//
-//        if (MACROING) {
-//            BobState m = macroState;
-//            if (m.shooterRPM != null) shooterController.setRPM(m.shooterRPM);
-//            if (m.spindexerAngle != null) spindexerController.incrementAngle(m.spindexerAngle);
-//
-//            if (m.transferPosition != null) {
-//                if (m.transferPosition == TRANSFER_UP) {
-//                    transferController.setUp();
-//                } else {
-//                    transferController.setDown();
-//                }
-//            }
-//            if (m.intakePower != null) {
-//                if (m.intakePower == INTAKE_POWER_IN) {
-//                    intakeController.intake();
-//                } else if (m.intakePower == INTAKE_POWER_OUT) {
-//                    intakeController.outtake();
-//                } else {
-//                    intakeController.stopIntake();
-//                }
-//            }
-//
-//            if (m.linkedState != null) {
-//                if (m.linkedState.type == Link.LinkType.WAIT) {
-//                    macroTimer.reset();
-//                    macroTimeout = m.linkedState.trigger;
-//                    macroState = m.linkedState.nextState;
-//                    macroState = m.linkedState.nextState;
-//                }
-//            }
-//            MACROING = false;
-//        }
-//    }
-
     public void tickWithMacros() {
         if (follower != null) follower.update();
         tickMacros();
-        shooterController.shooterTick();
+       // shooterController.shooterTick();
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
 
+
+    }
+    public double getProx(){
+        return proximityController.getProx();
     }
 }

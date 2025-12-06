@@ -29,6 +29,7 @@ public class Constants {
             .translationalPIDFCoefficients(new PIDFCoefficients(0.19,0,0.02,0.03))
             .headingPIDFCoefficients(new PIDFCoefficients(1.55,0,.1,.02))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.02,0,0.0001,1,0))
+
             .centripetalScaling(0.0003);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
@@ -36,6 +37,7 @@ public class Constants {
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
             .rightFrontMotorName("fr")
+
             .rightRearMotorName("br")
             .leftRearMotorName("bl")
             .leftFrontMotorName("fl")
@@ -53,17 +55,7 @@ public class Constants {
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD);
-//            .forwardPodY(4)
-//            .strafePodX(4)
-//            .forwardTicksToInches(0.001069012)
-//            .strafeTicksToInches(0.00106901)
-//            .IMU_HardwareMapName("imu")
-//            .IMU_Orientation(
-//                    new RevHubOrientationOnRobot(
-//                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
-//                            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-//                    )
-//            );
+
 
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)

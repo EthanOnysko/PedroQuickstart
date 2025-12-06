@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.pedroPathing.Robot.OnRPM;
 import static org.firstinspires.ftc.teamcode.pedroPathing.Robot.intakePower;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import java.util.Deque;
 import java.util.LinkedList;
+@Disabled
 
 @TeleOp
 @Configurable

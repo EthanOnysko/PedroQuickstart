@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.pedroPathing;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -23,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-
+@Disabled
 @TeleOp
 public class LimeLight extends OpMode {
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();

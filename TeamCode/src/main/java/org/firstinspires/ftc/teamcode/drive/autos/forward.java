@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive.autos;
 
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
-import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.testy;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
@@ -25,7 +22,6 @@ public class forward extends OpMode {
     private Timer pathTimer, actionTimer, opmodeTimer;
     private int pathState;
     private boolean waiting = false;
-    private double prox;
 
     private final Pose startPose = new Pose(104.123, 83.692, Math.toRadians(0)); // Start Pose of our robot.
     public PathChain Path1;
@@ -101,7 +97,7 @@ public class forward extends OpMode {
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (prox < 10){
+                    if (bob.getProx() < BALL_PROX){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setPathState(2);
                     }
@@ -117,7 +113,7 @@ public class forward extends OpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (prox < 10){
+                    if (bob.getProx() < BALL_PROX){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setPathState(5);
                     }
@@ -151,7 +147,6 @@ public class forward extends OpMode {
     @Override
     public void loop() {
 
-        prox = bob.c.getDistance(DistanceUnit.MM);
         follower.update();
         autonomousPathUpdate();
         bob.tick();

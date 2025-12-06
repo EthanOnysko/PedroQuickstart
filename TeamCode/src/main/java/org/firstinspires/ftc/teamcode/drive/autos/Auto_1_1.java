@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive.autos;
 
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
@@ -14,12 +15,11 @@ import com.pedropathing.util.Timer;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
 @Autonomous
-public class Test_1_1 extends OpMode {
+public class Auto_1_1 extends OpMode {
     Bob bob = new Bob();
 
     private boolean waiting = false;
@@ -30,7 +30,6 @@ public class Test_1_1 extends OpMode {
     private int pathState;
     private int intakeState = 0;
     private boolean waiting2 = false;
-    private double prox;
     private final Pose startPose = new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)); // Start Pose of our robot.
 
     public PathChain Path1;
@@ -45,8 +44,8 @@ public class Test_1_1 extends OpMode {
     public PathChain SpikeMark23;
     public PathChain SpikeMark24;
     public PathChain park;
+    public PathChain Path100;
 
-    public PathChain Path3_2_5;
     public void buildPaths() {
 
 
@@ -199,7 +198,7 @@ public class Test_1_1 extends OpMode {
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.getProx() < BALL_PROX || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(2);
                     }
@@ -218,7 +217,7 @@ public class Test_1_1 extends OpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.getProx() < BALL_PROX || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(5);
                     }
@@ -232,7 +231,7 @@ public class Test_1_1 extends OpMode {
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    if (prox < 10 || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.getProx() < BALL_PROX || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.intakeController.stopIntake();
                         if (isSpike1) {
                             pathState = 7;
@@ -351,6 +350,7 @@ public class Test_1_1 extends OpMode {
                 follower.followPath(park);
                 setP(-1);
 
+
             default:
                 break;
         }
@@ -371,7 +371,6 @@ public class Test_1_1 extends OpMode {
     }
 
     public void bigTick(){
-        prox = bob.c.getDistance(DistanceUnit.MM);
         follower.update();
         autoMain();
         bob.tick();
@@ -381,7 +380,7 @@ public class Test_1_1 extends OpMode {
 
         bigTick();
 
-        telemetry.addData("prox: ", prox);
+        telemetry.addData("prox: ", bob.getProx());
 //        telemetry.addData("path state", pathState);
 //        telemetry.addData("x", follower.getPose().getX());
 //        telemetry.addData("y", follower.getPose().getY());
