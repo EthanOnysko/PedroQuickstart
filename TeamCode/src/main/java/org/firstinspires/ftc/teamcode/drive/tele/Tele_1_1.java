@@ -79,14 +79,11 @@ public class Tele_1_1 extends OpMode {
     @Override
     public void loop() {
         if (gamepad2.start || gamepad1.start) return;
-//        telemetry.addData("current RPM:    ", bob.newShooterController.getCurrentRPM());
-//        telemetry.addData("target RPM:   ", bob.newShooterController.getTargetRPM());
-//        telemetry.update();
 
         telemetryM.debug("current RPM:    "+ bob.newShooterController.getCurrentRPM());
         telemetryM.debug("target RPM:   "+ bob.newShooterController.getTargetRPM());
         telemetryM.update(telemetry);
-        // limelight tracking
+//        // limelight tracking
         updateRotationCorrection();
         drive();
         //TODO: GAMEPAD1 CONTROLS (DRIVER)
@@ -112,7 +109,8 @@ public class Tele_1_1 extends OpMode {
             else bob.runMacro(SHOOTER_ZONE2_MATIC);
         }
         //shooting all 3 balls
-        if (gamepad1.y && !lastGamepad1.y) {
+        if (gamepad1.y && !lastGamepad1.y &&
+        numBalls == 4) {
             bob.runMacro(SHOOT_ALL_THREE);
             macroTimer.resetTimer();
             isMacroing = true;

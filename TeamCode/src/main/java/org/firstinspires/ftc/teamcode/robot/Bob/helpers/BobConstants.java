@@ -7,12 +7,17 @@ public class BobConstants {
 
     // ==================== SHOOTER ====================
     public static double TICKS_PER_REV_SHOOTER = 28;
-    public static int RPM_ZONE1 = 2450;
-    public static int RPM_ZONE2 = 3000;
+    public static int RPM_ZONE1 = 2570;
+    public static int RPM_ZONE2 = 3200;
     public static int RPM_OFF = 0;
-    public static double SHOOTER_P = 0;
-    public static double SHOOTER_I = 0;
-    public static double SHOOTER_D = 0;
+    // ZONE 1 PID Values
+    public static double SHOOTER_P_Z1 = 0.012;
+    public static double SHOOTER_I_Z1 = 0;
+    public static double SHOOTER_D_Z1 = 0.0000004;
+    // ZONE 2 PID Values
+    public static double SHOOTER_P_Z2 = 0.014;
+    public static double SHOOTER_I_Z2 = 0.0006;
+    public static double SHOOTER_D_Z2 = 0.0000004;
 
     // ==================== SPINDEXER ====================
     public static double TICKS_PER_REV_SPINDEXER = 8192;

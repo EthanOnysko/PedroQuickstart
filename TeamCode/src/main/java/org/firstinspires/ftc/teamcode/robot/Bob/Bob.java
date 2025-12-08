@@ -108,7 +108,7 @@ public class Bob extends Meccanum implements Robot {
 
     public void tick() {
         tickMacros();
-       // shooterController.shooterTick();
+      //  shooterController.shooterTick();
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
@@ -220,16 +220,21 @@ public class Bob extends Meccanum implements Robot {
     public class NewShooterController {
         private PIDShooter shootPID;
         public void start() {
-            shootPID = new PIDShooter(TICKS_PER_REV_SHOOTER, SHOOTER_P, SHOOTER_I, SHOOTER_D);
+            shootPID = new PIDShooter(TICKS_PER_REV_SHOOTER, SHOOTER_P_Z1, SHOOTER_I_Z1, SHOOTER_D_Z1);
             shootPID.reset(0);
         }
 
         public void update(){
             double currentTicks = (shooterLeft.getCurrentPosition() + shooterRight.getCurrentPosition()) / 2.0;
+
+            if (shootPID.getTargetRPM() == RPM_OFF)shootPID.setConsts(0, 0, 0);
+            // else if (shootPID.getTargetRPM() == RPM_ZONE1) shootPID.setConsts(SHOOTER_P_Z1, SHOOTER_I_Z1, SHOOTER_D_Z1);
+          //  else if (shootPID.getTargetRPM() == RPM_ZONE2) shootPID.setConsts(SHOOTER_P_Z2, SHOOTER_I_Z2, SHOOTER_D_Z2);
+            else shootPID.setConsts(SHOOTER_P_Z1, SHOOTER_I_Z1, SHOOTER_D_Z1);
+
             double power = shootPID.update(currentTicks);
             shooterLeft.setPower(power);
             shooterRight.setPower(power);
-            shootPID.setConsts(SHOOTER_P, SHOOTER_I, SHOOTER_D);
         }
         public void setRPM(double rpm) {
             shootPID.setTargetRPM(rpm);
