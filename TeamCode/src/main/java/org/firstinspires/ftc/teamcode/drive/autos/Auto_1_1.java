@@ -31,6 +31,7 @@ public class Auto_1_1 extends OpMode {
     private int intakeState = 0;
     private boolean waiting2 = false;
     private final Pose startPose = new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)); // Start Pose of our robot.
+    private boolean finished = false;
 
     public PathChain Path1;
     public PathChain Path2;
@@ -45,6 +46,13 @@ public class Auto_1_1 extends OpMode {
     public PathChain SpikeMark24;
     public PathChain park;
     public PathChain Path100;
+
+    private void endAuto() {
+        if (finished) return;  // make it idempotent
+
+        finished = true;
+        bob.lastPose = follower.getPose();
+    }
 
     public void buildPaths() {
 
@@ -374,11 +382,15 @@ public class Auto_1_1 extends OpMode {
         follower.update();
         autoMain();
         bob.tick();
+
     }
     @Override
     public void loop() {
 
         bigTick();
+        if (pathState == -1 || opmodeTimer.getElapsedTimeSeconds() > 29.5) {
+            endAuto();
+        }
 
         telemetry.addData("prox: ", bob.getProx());
 //        telemetry.addData("path state", pathState);
@@ -420,7 +432,9 @@ public class Auto_1_1 extends OpMode {
 
     /** We do not use this because everything should automatically disable **/
     @Override
-    public void stop() {}
+    public void stop() {
+        endAuto();
+    }
 
 }
 
