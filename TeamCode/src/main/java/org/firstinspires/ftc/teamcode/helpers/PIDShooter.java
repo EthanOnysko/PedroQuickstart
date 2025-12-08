@@ -7,6 +7,7 @@ public class PIDShooter {
 
     // PID gains
     private double kP, kI, kD;
+    private double currentRPM = 0;
 
     // Motor/encoder geometry
     private final double ticksPerRev;
@@ -70,6 +71,10 @@ public class PIDShooter {
         return targetRPM;
     }
 
+    public double getCurrentRPM() {
+        return currentRPM;
+    }
+
     // --- RPM Calculation ---
 
     private double computeCurrentRPM(double currentTicks) {
@@ -81,17 +86,19 @@ public class PIDShooter {
         if (firstSample) {
             firstSample = false;
             lastTicks = currentTicks;
-            return 0;
+            currentRPM = 0;
+            return currentRPM;
         }
 
         double deltaTicks = currentTicks - lastTicks;
         lastTicks = currentTicks;
 
         double revs = deltaTicks / ticksPerRev;
-        double rpm = (revs / dt) * 60.0;
+        currentRPM = (revs / dt) * 60.0;
 
-        return rpm;
+        return currentRPM;
     }
+
 
     // --- Main PID update ---
 

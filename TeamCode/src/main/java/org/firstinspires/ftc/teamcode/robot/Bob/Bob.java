@@ -28,7 +28,7 @@ public class Bob extends Meccanum implements Robot {
     protected HardwareMap hw = null;
 
     // Controllers
-   // public ShooterController shooterController = new ShooterController();
+    public ShooterController shooterController = new ShooterController();
     public SpindexerController spindexerController = new SpindexerController();
     public IntakeController intakeController = new IntakeController();
     public TransferController transferController = new TransferController();
@@ -95,7 +95,8 @@ public class Bob extends Meccanum implements Robot {
 
         light = hardwareMap.get(Servo.class, "light");
 
-      //  shooterController.start();
+       // shooterController.start();
+        newShooterController.start();
         spindexerController.start();
         intakeController.start();
         transferController.start();
@@ -107,7 +108,7 @@ public class Bob extends Meccanum implements Robot {
 
     public void tick() {
         tickMacros();
-     //   shooterController.shooterTick();
+       // shooterController.shooterTick();
         spindexerController.spindexerTick();
         intakeController.intakeTick();
         transferController.transferTick();
@@ -232,6 +233,12 @@ public class Bob extends Meccanum implements Robot {
         }
         public void setRPM(double rpm) {
             shootPID.setTargetRPM(rpm);
+        }
+        public double getCurrentRPM() {
+            return shootPID.getCurrentRPM();
+        }
+        public double getTargetRPM(){
+            return shootPID.getTargetRPM();
         }
 
     }

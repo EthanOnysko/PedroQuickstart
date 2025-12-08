@@ -73,6 +73,9 @@ public class Tele_1_1 extends OpMode {
     @Override
     public void loop() {
         if (gamepad2.start || gamepad1.start) return;
+        telemetry.addData("current RPM:    ", bob.newShooterController.getCurrentRPM());
+        telemetry.addData("target RPM:   ", bob.newShooterController.getTargetRPM());
+        telemetry.update();
         // limelight tracking
         updateRotationCorrection();
         drive();
