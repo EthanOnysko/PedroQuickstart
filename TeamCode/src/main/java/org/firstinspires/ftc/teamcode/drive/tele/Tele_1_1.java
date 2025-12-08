@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive.tele;
 
+import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.util.Timer;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -25,11 +28,12 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_
 
 import java.util.Deque;
 import java.util.LinkedList;
-
 @TeleOp(name = "1.1 - Dual state (speed) (NO MANUAL CONTROL)")
 public class Tele_1_1 extends OpMode {
 
     Bob bob = new Bob();
+
+    TelemetryManager telemetryM;
 
     Limelight3A limelight;
     private Timer macroTimer, actionTimer, opmodeTimer;
@@ -50,8 +54,10 @@ public class Tele_1_1 extends OpMode {
     private boolean isZoneOne = true;
     private boolean isMacroing = false;
     private int numBalls = 0;
+
     @Override
     public void init() {
+        telemetryM = PanelsTelemetry.INSTANCE.getTelemetry();
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
@@ -73,9 +79,13 @@ public class Tele_1_1 extends OpMode {
     @Override
     public void loop() {
         if (gamepad2.start || gamepad1.start) return;
-        telemetry.addData("current RPM:    ", bob.newShooterController.getCurrentRPM());
-        telemetry.addData("target RPM:   ", bob.newShooterController.getTargetRPM());
-        telemetry.update();
+//        telemetry.addData("current RPM:    ", bob.newShooterController.getCurrentRPM());
+//        telemetry.addData("target RPM:   ", bob.newShooterController.getTargetRPM());
+//        telemetry.update();
+
+        telemetryM.debug("current RPM:    "+ bob.newShooterController.getCurrentRPM());
+        telemetryM.debug("target RPM:   "+ bob.newShooterController.getTargetRPM());
+        telemetryM.update(telemetry);
         // limelight tracking
         updateRotationCorrection();
         drive();

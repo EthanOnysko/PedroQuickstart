@@ -20,13 +20,7 @@ public class BobConstants {
     public static double SPINDEX_KI = 0;
     public static double SPINDEX_KD = 0.00005;
 
-    // Spindexer PID constants (normal mode)
-//    public static double SPINDEX_KP = 0.001;
-//    public static double SPINDEX_KI = 0.000001;
-//    public static double SPINDEX_KD = 0.00011;
-
     public static double SPINDEX_EMERGENCY_POWER_LIMIT = 0.6;
-
 
     // ==================== TRANSFER ====================
     public static double TRANSFER_UP = 0.3;
