@@ -6,6 +6,7 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.*;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -52,6 +53,8 @@ public class Bob extends Meccanum implements Robot {
     public Telemetry tele;
     public boolean inited = false;
     public ElapsedTime runtime = new ElapsedTime();
+
+    public Pose lastPose;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -226,7 +229,12 @@ public class Bob extends Meccanum implements Robot {
 
         public void update(){
             double currentTicks = (shooterLeft.getCurrentPosition() + shooterRight.getCurrentPosition()) / 2.0;
-            double power = shootPID.update(currentTicks);
+            double power;
+            if (shootPID.getTargetRPM() == 0) {
+                power = 0;
+            } else {
+                power = shootPID.update(currentTicks);
+            }
             shooterLeft.setPower(power);
             shooterRight.setPower(power);
             shootPID.setConsts(SHOOTER_P, SHOOTER_I, SHOOTER_D);
