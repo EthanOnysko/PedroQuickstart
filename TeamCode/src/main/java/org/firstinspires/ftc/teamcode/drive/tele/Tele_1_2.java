@@ -22,7 +22,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.helpers.PID;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.INTAKE_POWER_IN;
@@ -75,14 +74,7 @@ public class Tele_1_2 extends OpMode {
     private boolean isMacroing = false;
     private int numBalls = 0;
 
-    public void drawCurrent() {
-        try {
-            Drawing.drawRobot(follower.getPose());
-            Drawing.sendPacket();
-        } catch (Exception e) {
-            throw new RuntimeException("Drawing failed " + e);
-        }
-    }
+
 
     @Override
     public void init() {
@@ -119,8 +111,7 @@ public class Tele_1_2 extends OpMode {
         Pose currentPose = follower.getPose();
         telemetryM.debug("Pedro Pose:  "+String.format("x=%.2f in, y=%.2f in, h=%.1f deg", currentPose.getX(), currentPose.getY(), Math.toDegrees(currentPose.getHeading())));
 
-        Drawing.drawPoseHistory(follower.getPoseHistory());
-        drawCurrent();
+
 
 //        telemetry.addData("current RPM:    ", bob.newShooterController.getCurrentRPM());
 //        telemetry.addData("target RPM:   ", bob.newShooterController.getTargetRPM());
