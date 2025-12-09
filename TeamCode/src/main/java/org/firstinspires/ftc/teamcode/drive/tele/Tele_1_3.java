@@ -92,7 +92,7 @@ public class Tele_1_3 extends OpMode {
             numBalls = 4;
             bob.runMacro(SPINDEXER_SIXTY);
         }
-        
+
         bob.tick();
         gamepad1History.add(gamepad1);
         gamepad2History.add(gamepad2);
