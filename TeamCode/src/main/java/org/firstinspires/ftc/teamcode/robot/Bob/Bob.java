@@ -188,7 +188,8 @@ public class Bob extends Meccanum implements Robot {
         private boolean isBall;
         public void proximityTick(){
             isBall = (c.getDistance(DistanceUnit.MM) < BALL_PROX
-                    || c2.getDistance(DistanceUnit.MM) < BALL_PROX);
+                   // || c2.getDistance(DistanceUnit.MM) < BALL_PROX);
+            );
         }
         public boolean isBall(){
             return isBall;
