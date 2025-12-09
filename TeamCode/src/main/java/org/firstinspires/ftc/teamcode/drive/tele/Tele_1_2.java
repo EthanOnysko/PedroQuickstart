@@ -5,6 +5,7 @@ import com.bylazar.telemetry.PanelsTelemetry;
 import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.BezierPoint;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.HeadingInterpolator;
 import com.pedropathing.paths.Path;
@@ -181,9 +182,9 @@ public class Tele_1_2 extends OpMode {
 
             PathChain chain = follower.pathBuilder()
                     .addPath(
-                            new BezierLine(follower::getPose, follower::getPose)
+                            new BezierPoint(pose)
                     )
-                    .setLinearHeadingInterpolation(follower.getHeading(), targetHeading)
+                    .setConstantHeadingInterpolation(targetHeading)
                     .build();
 
             follower.followPath(chain);
@@ -223,18 +224,18 @@ public class Tele_1_2 extends OpMode {
     private void drive(){
         if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1) {
             // normal driving
-            bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x);
+            bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_bumper) {
             // slow
-            bob.motorDriveXYVectors(0.7 * -gamepad1.left_stick_x, 0.7 * gamepad1.left_stick_y, 0.3 * -gamepad1.right_stick_x);
+            bob.motorDriveXYVectors(0.7 * gamepad1.left_stick_x, 0.7 * -gamepad1.left_stick_y, 0.3 * gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_trigger > 0.1) {
             // limelight
             rotationCorrectionOn = true;
-            bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, rotationPower);
+            bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, rotationPower);
 
         }
     }
