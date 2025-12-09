@@ -4,7 +4,10 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_2;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_2_BOMBA;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_3;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_3_BOMBA;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_BOMBA;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_SIXTY;
@@ -277,7 +280,7 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 2:
             case 11:
-                waitThenRun(2.4);
+                waitThenRun(2.7);
                 break;
 
             case 3:
@@ -300,7 +303,17 @@ public class Auto_1_1 extends OpMode {
 
             case 7:
                 if (!follower.isBusy()) {
-                    bob.runMacro(SPINDEXER_SIXTY);
+                    switch (greenBallTarget){
+                        case 1:
+                            bob.runMacro(SHOOTER_ZONE1_AUTO_3_BOMBA);
+                            break;
+                        case 2:
+                            bob.runMacro(SHOOTER_ZONE1_AUTO_BOMBA);
+                            break;
+                        case 3:
+                            bob.runMacro(SHOOTER_ZONE1_AUTO_2_BOMBA);
+                            break;
+                    }
                     follower.followPath(Path4,1,true);
                     setP(8);
 
@@ -340,7 +353,18 @@ public class Auto_1_1 extends OpMode {
 
             case 15:
                 if (!follower.isBusy()) {
-                    bob.runMacro(SPINDEXER_SIXTY);
+
+                    switch (greenBallTarget){
+                        case 1:
+                            bob.runMacro(SHOOTER_ZONE1_AUTO_BOMBA);
+                            break;
+                        case 2:
+                            bob.runMacro(SHOOTER_ZONE1_AUTO_2_BOMBA);
+                            break;
+                        case 3:
+                            bob.runMacro(SHOOTER_ZONE1_AUTO_3_BOMBA);
+                            break;
+                    }
                     follower.followPath(SpikeMark24,1,true);
                     setP(16);
 
@@ -361,7 +385,7 @@ public class Auto_1_1 extends OpMode {
 
                 break;
             case 19:
-                waitThenRun(2.5);
+                waitThenRun(2.7);
                 break;
             case 20:
                 follower.followPath(park);
@@ -420,6 +444,7 @@ public class Auto_1_1 extends OpMode {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
+        limelight.start();
 
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
@@ -439,7 +464,6 @@ public class Auto_1_1 extends OpMode {
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
-
         switch (greenBallTarget){
             case 1:
                 bob.runMacro(SHOOTER_ZONE1_AUTO);
@@ -449,9 +473,6 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 3:
                 bob.runMacro(SHOOTER_ZONE1_AUTO_3);
-                break;
-            default:
-                bob.runMacro(SHOOTER_ZONE1_AUTO);
                 break;
         }
 
@@ -472,27 +493,28 @@ public class Auto_1_1 extends OpMode {
                 List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
                 for (LLResultTypes.FiducialResult fiducial : fiducials){
                     int id = fiducial.getFiducialId();
+                    telemetry.addData("id: ", id);
+
                     switch(id){
                         case 21:
                             greenBallTarget = 1;
+                            telemetry.addData("greenyINS: ", greenBallTarget);
                             break;
                         case 22:
                             greenBallTarget = 2;
+                            telemetry.addData("greenyINS: ", greenBallTarget);
                             break;
                         case 23:
                             greenBallTarget = 3;
-                            break;
-                        default:
-                            greenBallTarget = 1;
+                            telemetry.addData("greenyINS: ", greenBallTarget);
                             break;
                     }
                 }
-            } else {
-                greenBallTarget = 1;
             }
-
 
         telemetry.update();
     }
+
+
 }
 

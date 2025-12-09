@@ -6,13 +6,13 @@ public class Macros {
     // In Macros.java - Auto versions with absolute angles
     public static final BobState SHOOT_ALL_THREE_AUTO_FINAL = new BobState(null, 60.0, null, null, null, null);
     public static final BobState SHOOT_ALL_THREE_AUTO8 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO_FINAL));
-    public static final BobState SHOOT_ALL_THREE_AUTO7 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 300, SHOOT_ALL_THREE_AUTO8));
+    public static final BobState SHOOT_ALL_THREE_AUTO7 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO8));
     public static final BobState SHOOT_ALL_THREE_AUTO6 = new BobState(null, 120.0, null, null, null, new LinkedState(Link.LinkType.WAIT, 500, SHOOT_ALL_THREE_AUTO7));  // Absolute 240°
     public static final BobState SHOOT_ALL_THREE_AUTO5 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO6));
-    public static final BobState SHOOT_ALL_THREE_AUTO4 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 300, SHOOT_ALL_THREE_AUTO5));
+    public static final BobState SHOOT_ALL_THREE_AUTO4 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO5));
     public static final BobState SHOOT_ALL_THREE_AUTO3 = new BobState(null, 120.0, null, null, null, new LinkedState(Link.LinkType.WAIT, 500, SHOOT_ALL_THREE_AUTO4));  // Absolute 120°
     public static final BobState SHOOT_ALL_THREE_AUTO2 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO3));
-    public static final BobState SHOOT_ALL_THREE_AUTO = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 300, SHOOT_ALL_THREE_AUTO2));
+    public static final BobState SHOOT_ALL_THREE_AUTO = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO2));
 
     public static final BobState SHOOT_ALL_THREE_FINAL = new BobState(0, 60.0,null, null, null, null);
     // shoot 3 ball
@@ -40,6 +40,13 @@ public class Macros {
     public static final BobState SHOOTER_ZONE1_AUTO_2 = new BobState(RPM_ZONE1_AUTO, -120.0, null);
 
     public static final BobState SHOOTER_ZONE1_AUTO_3 = new BobState(RPM_ZONE1_AUTO, 120.0, null);
+
+
+    public static final BobState SHOOTER_ZONE1_AUTO_BOMBA = new BobState(RPM_ZONE1_AUTO, 60.0, null);
+
+    public static final BobState SHOOTER_ZONE1_AUTO_2_BOMBA = new BobState(RPM_ZONE1_AUTO, -120.0+60.0, null);
+
+    public static final BobState SHOOTER_ZONE1_AUTO_3_BOMBA = new BobState(RPM_ZONE1_AUTO, 120.0+60.0, null);
 
     // spin shooter zone2
     public static final BobState SHOOTER_ZONE2 = new BobState(RPM_ZONE2, null, null);
