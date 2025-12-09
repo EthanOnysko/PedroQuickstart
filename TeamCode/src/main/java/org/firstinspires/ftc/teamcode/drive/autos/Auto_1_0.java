@@ -109,8 +109,6 @@ public class Auto_1_0 extends OpMode {
                     .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
 
                     .build();
-
-
     }
 
     public boolean t(double seconds){
