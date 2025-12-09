@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.drive.autos;
 
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_2;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_3;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_RIGHT;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_SIXTY;
@@ -12,18 +15,24 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.pedropathing.util.Timer;
+import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
+import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
+import java.util.List;
+
 @Autonomous
 public class Auto_1_1 extends OpMode {
     Bob bob = new Bob();
 
+    private int greenBallTarget = 1;
     private boolean waiting = false;
-
+    Limelight3A limelight;
     private boolean isSpike1 = true;
     private Follower follower;
     private Timer pathTimer, actionTimer, opmodeTimer;
@@ -206,7 +215,7 @@ public class Auto_1_1 extends OpMode {
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (bob.getProx() < BALL_PROX || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(2);
                     }
@@ -225,7 +234,7 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (bob.getProx() < BALL_PROX || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(5);
                     }
@@ -239,7 +248,7 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    if (bob.getProx() < BALL_PROX || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1){
                         bob.intakeController.stopIntake();
                         if (isSpike1) {
                             pathState = 7;
@@ -392,7 +401,7 @@ public class Auto_1_1 extends OpMode {
             endAuto();
         }
 
-        telemetry.addData("prox: ", bob.getProx());
+        telemetry.addData("there is ball: ", bob.isBall());
 //        telemetry.addData("path state", pathState);
 //        telemetry.addData("x", follower.getPose().getX());
 //        telemetry.addData("y", follower.getPose().getY());
@@ -408,6 +417,9 @@ public class Auto_1_1 extends OpMode {
         opmodeTimer = new Timer();
         opmodeTimer.resetTimer();
         bob.init(hardwareMap);
+        limelight = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight.setPollRateHz(100);
+        limelight.pipelineSwitch(0);
 
         follower = Constants.createFollower(hardwareMap);
         buildPaths();
@@ -417,15 +429,34 @@ public class Auto_1_1 extends OpMode {
 
     /** This method is called continuously after Init while waiting for "play". **/
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+        obelisk();
+        telemetry.addData("shoot green ball: ", greenBallTarget);
+        telemetry.update();
+    }
 
     /** This method is called once at the start of the OpMode.
      * It runs all the setup actions, including building paths and starting the path system **/
     @Override
     public void start() {
-        bob.transferController.setDown();
-        bob.runMacro(SHOOTER_ZONE1);
 
+        switch (greenBallTarget){
+            case 1:
+                bob.runMacro(SHOOTER_ZONE1_AUTO);
+                break;
+            case 2:
+                bob.runMacro(SHOOTER_ZONE1_AUTO_2);
+                break;
+            case 3:
+                bob.runMacro(SHOOTER_ZONE1_AUTO_3);
+                break;
+            default:
+                bob.runMacro(SHOOTER_ZONE1_AUTO);
+                break;
+        }
+
+
+        bob.transferController.setDown();
         opmodeTimer.resetTimer();
         setP(0);
     }
@@ -435,6 +466,33 @@ public class Auto_1_1 extends OpMode {
     public void stop() {
         endAuto();
     }
+    private void obelisk() {
+            LLResult result = limelight.getLatestResult();
+            if (result != null && result.isValid()) {
+                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+                for (LLResultTypes.FiducialResult fiducial : fiducials){
+                    int id = fiducial.getFiducialId();
+                    switch(id){
+                        case 21:
+                            greenBallTarget = 1;
+                            break;
+                        case 22:
+                            greenBallTarget = 2;
+                            break;
+                        case 23:
+                            greenBallTarget = 3;
+                            break;
+                        default:
+                            greenBallTarget = 1;
+                            break;
+                    }
+                }
+            } else {
+                greenBallTarget = 1;
+            }
 
+
+        telemetry.update();
+    }
 }
 

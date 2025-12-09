@@ -84,7 +84,7 @@ public class Tele_1_0 extends OpMode {
             if (intake) bob.intakeController.intake();
             else bob.intakeController.stopIntake();
         }
-        if (bob.getProx() < BALL_PROX &&
+        if (bob.isBall() &&
                 bob.intakeController.getIntake() == INTAKE_POWER_IN &&
                 actionTimer.getElapsedTimeSeconds() > .5
         ){

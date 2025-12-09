@@ -35,6 +35,12 @@ public class Macros {
     public static final BobState SHOOTER_ZONE2_MATIC = new BobState(RPM_ZONE2, 60.0, null);
     public static final BobState SHOOTER_ZONE1_MATIC = new BobState(RPM_ZONE1, 60.0, null);
 
+    public static final BobState SHOOTER_ZONE1_AUTO = new BobState(RPM_ZONE1_AUTO, null, null);
+
+    public static final BobState SHOOTER_ZONE1_AUTO_2 = new BobState(RPM_ZONE1_AUTO, -120.0, null);
+
+    public static final BobState SHOOTER_ZONE1_AUTO_3 = new BobState(RPM_ZONE1_AUTO, 120.0, null);
+
     // spin shooter zone2
     public static final BobState SHOOTER_ZONE2 = new BobState(RPM_ZONE2, null, null);
 

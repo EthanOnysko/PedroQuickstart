@@ -164,7 +164,7 @@ public class Tele_1_4 extends OpMode {
         if (gamepad2.x && !lastGamepad2.x) {
             intakeOn = !intakeOn;
         }
-        if (bob.getProx() < BALL_PROX &&
+        if (bob.isBall() &&
                 bob.intakeController.getIntake() == INTAKE_POWER_IN &&
                 actionTimer.getElapsedTimeSeconds() > .5 &&
                 numBalls < 3

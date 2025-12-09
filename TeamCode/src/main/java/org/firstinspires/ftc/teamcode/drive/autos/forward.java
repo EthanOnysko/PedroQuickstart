@@ -97,7 +97,7 @@ public class forward extends OpMode {
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (bob.getProx() < BALL_PROX){
+                    if (bob.isBall()){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setPathState(2);
                     }
@@ -113,7 +113,7 @@ public class forward extends OpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (bob.getProx() < BALL_PROX){
+                    if (bob.isBall()){
                         bob.runMacro(SPINDEXER_RIGHT);
                         setPathState(5);
                     }

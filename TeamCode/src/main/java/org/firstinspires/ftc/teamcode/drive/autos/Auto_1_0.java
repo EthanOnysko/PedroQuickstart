@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.drive.autos;
 
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.INTAKE_THEN_SPIN;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOT_ALL_THREE_AUTO;
 
 import com.pedropathing.follower.Follower;
@@ -267,7 +268,7 @@ public class Auto_1_0 extends OpMode {
     @Override
     public void start() {
         bob.transferController.setDown();
-        bob.runMacro(SHOOTER_ZONE1);
+        bob.runMacro(SHOOTER_ZONE1_AUTO);
 
         opmodeTimer.resetTimer();
         setP(0);
