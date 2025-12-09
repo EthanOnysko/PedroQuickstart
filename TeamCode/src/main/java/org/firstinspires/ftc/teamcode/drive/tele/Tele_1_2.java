@@ -120,6 +120,7 @@ public class Tele_1_2 extends OpMode {
 
         telemetryM.debug("current RPM:    "+ bob.newShooterController.getCurrentRPM());
         telemetryM.debug("target RPM:   "+ bob.newShooterController.getTargetRPM());
+        telemetryM.debug("Follower Busy: "+follower.isBusy());
         telemetryM.update(telemetry);
         // limelight tracking
         updateRotationCorrection();
@@ -127,6 +128,8 @@ public class Tele_1_2 extends OpMode {
         if (!automatedDrive) {
             drive();
         }
+
+
         //TODO: GAMEPAD1 CONTROLS (DRIVER)
 
         if (intakeOn && numBalls < 3) bob.intakeController.intake();
@@ -152,11 +155,32 @@ public class Tele_1_2 extends OpMode {
         //shooting all 3 balls
         if (gamepad1.y && !lastGamepad1.y) {
             bob.runMacro(SHOOT_ALL_THREE);
+            Pose pose = follower.getPose();
+
+            double targetX = 132;
+            double targetY = 132;
+
+            double targetHeading = Math.atan2(
+                    targetY - pose.getY(),
+                    targetX - pose.getX()
+            );
+
+            PathChain chain = follower.pathBuilder()
+                    .addPath(
+                            new BezierPoint(pose)
+                    )
+                    .setConstantHeadingInterpolation(targetHeading)
+                    .build();
+
+            follower.followPath(chain);
+            automatedDrive = true;
             macroTimer.resetTimer();
             isMacroing = true;
         }
         if (macroTimer.getElapsedTimeSeconds() > 3) {
             isMacroing = false;
+            automatedDrive = false;
+            follower.breakFollowing();
             numBalls = 0;
         }
         if (!isMacroing) macroTimer.resetTimer();
@@ -168,6 +192,13 @@ public class Tele_1_2 extends OpMode {
 
         //zone 2
         if (gamepad2.y && !lastGamepad2.y) isZoneOne = false;
+
+        if (gamepad1.dpad_up) {
+            automatedDrive = true;
+        } else if (lastGamepad1.dpadUpWasReleased()){
+            automatedDrive = false;
+            follower.breakFollowing();
+        }
 
         if (gamepad1.dpad_up && !lastGamepad1.dpad_up) {
             Pose pose = follower.getPose();
@@ -191,9 +222,7 @@ public class Tele_1_2 extends OpMode {
             automatedDrive = true;
         }
 
-        if (automatedDrive && !follower.isBusy()) {
-            automatedDrive = false;
-        }
+
 
         bob.tick();
         gamepad1History.add(gamepad1);
@@ -235,7 +264,7 @@ public class Tele_1_2 extends OpMode {
         else if (gamepad1.right_trigger > 0.1) {
             // limelight
             rotationCorrectionOn = true;
-            bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, rotationPower);
+            bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, -rotationPower);
 
         }
     }
