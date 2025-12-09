@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.INTAKE_POWER_IN;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.LSERVO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_OFF;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_MATIC;
@@ -86,9 +87,12 @@ public class Tele_1_1 extends OpMode {
 //        // limelight tracking
         updateRotationCorrection();
         drive();
+        bob.updateLight(numBalls);
+        bob.lservo.setPosition(LSERVO);
         //TODO: GAMEPAD1 CONTROLS (DRIVER)
 
-        if (intakeOn && numBalls < 3) bob.intakeController.intake();
+        if (intakeOn && numBalls < 3 && !gamepad2.b) bob.intakeController.intake();
+        else if (gamepad2.b) bob.intakeController.outtake();
         else bob.intakeController.stopIntake();
         
         if (gamepad2.right_bumper && !lastGamepad2.right_bumper) {
@@ -103,13 +107,19 @@ public class Tele_1_1 extends OpMode {
             actionTimer.resetTimer();
             bob.runMacro(SPINDEXER_RIGHT);
         }
+        if (gamepad2.dpad_up && !lastGamepad2.dpad_up){
+            numBalls = 4;
+            if (isZoneOne) bob.runMacro(SHOOTER_ZONE1_MATIC);
+            else bob.runMacro(SHOOTER_ZONE2_MATIC);
+        }
         if (numBalls == 3){
             numBalls = 4;
             if (isZoneOne) bob.runMacro(SHOOTER_ZONE1_MATIC);
             else bob.runMacro(SHOOTER_ZONE2_MATIC);
         }
         //shooting all 3 balls
-        if (gamepad1.y && !lastGamepad1.y &&
+
+        if (((gamepad2.left_bumper && !lastGamepad2.left_bumper) || (gamepad1.left_bumper && !lastGamepad1.left_bumper)) &&
         numBalls == 4) {
             bob.runMacro(SHOOT_ALL_THREE);
             macroTimer.resetTimer();
@@ -128,6 +138,11 @@ public class Tele_1_1 extends OpMode {
 
         //zone 2
         if (gamepad2.y && !lastGamepad2.y) isZoneOne = false;
+
+        if (numBalls == 4 && (gamepad2.y || gamepad2.a)){
+            if (isZoneOne) bob.runMacro(SHOOTER_ZONE1_MATIC);
+            else bob.runMacro(SHOOTER_ZONE2_MATIC);
+        }
 
         bob.tick();
         gamepad1History.add(gamepad1);
@@ -163,7 +178,7 @@ public class Tele_1_1 extends OpMode {
         }
         else if (gamepad1.right_bumper) {
             // slow
-            bob.motorDriveXYVectors(0.7 * -gamepad1.left_stick_x, 0.7 * gamepad1.left_stick_y, 0.3 * -gamepad1.right_stick_x);
+            bob.motorDriveXYVectors(0.85 * -gamepad1.left_stick_x, 0.85 * gamepad1.left_stick_y, 0.4 * -gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_trigger > 0.1) {

@@ -5,6 +5,7 @@ import com.bylazar.configurables.annotations.Configurable;
 @Configurable
 public class BobConstants {
 
+
     // ==================== SHOOTER ====================
     public static double TICKS_PER_REV_SHOOTER = 28;
     public static int RPM_ZONE1 = 2570;
@@ -28,7 +29,7 @@ public class BobConstants {
     public static double SPINDEX_EMERGENCY_POWER_LIMIT = 0.6;
 
     // ==================== TRANSFER ====================
-    public static double TRANSFER_UP = 0.3;
+    public static double TRANSFER_UP = 0.35;
     public static double TRANSFER_DOWN = 0.1;
     public static double TRANSFER_PULSE_TIME = 300; // milliseconds
 
@@ -41,4 +42,9 @@ public class BobConstants {
 
     // ==================== MISC ====================
     public static int INFINITY = 2000000000;
+    public static double LIGHT3 = 1.0;
+    public static double LIGHT2 = 0.66;
+    public static double LIGHT1 = 0.33;
+    public static double LIGHT0 = 0.0;
+    public static double LSERVO = 0.0;
 }

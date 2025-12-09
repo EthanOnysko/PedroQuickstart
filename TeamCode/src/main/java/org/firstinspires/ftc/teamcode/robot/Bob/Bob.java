@@ -46,6 +46,8 @@ public class Bob extends Meccanum implements Robot {
     public DcMotorEx spincoder; // Motor used as encoder for spindexer
     public Servo transfer;
     public Servo light;
+    public Servo lservo;
+
 
     // Pedro Pathing
     public Follower follower;
@@ -97,6 +99,7 @@ public class Bob extends Meccanum implements Robot {
         transfer = hardwareMap.get(Servo.class, "transfer");
 
         light = hardwareMap.get(Servo.class, "light");
+        lservo = hardwareMap.get(Servo.class, "lservo");
 
        // shooterController.start();
         newShooterController.start();
@@ -117,6 +120,25 @@ public class Bob extends Meccanum implements Robot {
         transferController.transferTick();
         proximityController.proximityTick();
         newShooterController.update();
+    }
+    public void updateLight(int n) {
+        switch(n){
+            case 0:
+                light.setPosition(LIGHT0);
+                break;
+            case 1:
+                light.setPosition(LIGHT1);
+                break;
+            case 2:
+                light.setPosition(LIGHT2);
+                break;
+            case 3:
+            case 4:
+                light.setPosition(LIGHT3);
+                break;
+            default:
+                break;
+        }
     }
 
     // TODO: SHOOTER SHIT
@@ -236,11 +258,7 @@ public class Bob extends Meccanum implements Robot {
             else shootPID.setConsts(SHOOTER_P_Z1, SHOOTER_I_Z1, SHOOTER_D_Z1);
 
             double power = shootPID.update(currentTicks);
-            if (shootPID.getTargetRPM() == 0) {
-                power = 0;
-            } else {
-                power = shootPID.update(currentTicks);
-            }
+
             shooterLeft.setPower(power);
             shooterRight.setPower(power);
         }

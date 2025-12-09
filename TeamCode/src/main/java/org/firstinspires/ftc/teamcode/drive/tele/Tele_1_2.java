@@ -41,7 +41,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 
 @Configurable
-@TeleOp(name = "1.1 - Dual state (speed) (NO MANUAL CONTROL)")
+@TeleOp(name = "1.2 ethan shit")
 public class Tele_1_2 extends OpMode {
 
     Bob bob = new Bob();
