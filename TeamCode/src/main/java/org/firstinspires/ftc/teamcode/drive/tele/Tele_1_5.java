@@ -17,6 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.helpers.PID;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
+import org.firstinspires.ftc.teamcode.robot.RobotContext;
 
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.INTAKE_POWER_IN;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
@@ -41,9 +42,8 @@ import java.util.function.Supplier;
 @TeleOp(name = "1.5 Quals TeleOp")
 public class Tele_1_5 extends OpMode {
 
-
     TelemetryManager telemetryM;
-    Bob bob = new Bob();
+    private final Bob bob = RobotContext.bob;
     Limelight3A limelight;
     private Timer macroTimer, actionTimer, opmodeTimer;
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();
