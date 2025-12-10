@@ -37,6 +37,7 @@ public class Bob extends Meccanum implements Robot {
     public NewShooterController newShooterController = new NewShooterController();
     public RevColorSensorV3 c;
     public RevColorSensorV3 c2;
+    public RevColorSensorV3 c3;
     // Motors
     public DcMotorEx intake;
     public DcMotorEx shooterRight;
@@ -91,7 +92,8 @@ public class Bob extends Meccanum implements Robot {
 
 
         c = hardwareMap.get(RevColorSensorV3.class, "color");
-        c2 = hardwareMap.get(RevColorSensorV3.class, "light2");
+        c2 = hardwareMap.get(RevColorSensorV3.class, "color2");
+        c3 = hardwareMap.get(RevColorSensorV3.class, "color3");
 
         spindexer = hardwareMap.get(CRServo.class, "spindexer");
         spincoder = hardwareMap.get(DcMotorEx.class, "spincoder"); // Using back left as encoder
@@ -188,8 +190,8 @@ public class Bob extends Meccanum implements Robot {
         private boolean isBall;
         public void proximityTick(){
             isBall = (c.getDistance(DistanceUnit.MM) < BALL_PROX
-                   // || c2.getDistance(DistanceUnit.MM) < BALL_PROX);
-            );
+                    || c2.getDistance(DistanceUnit.MM) < BALL_PROX
+            || c2.getDistance(DistanceUnit.MM) < BALL_PROX);
         }
         public boolean isBall(){
             return isBall;
