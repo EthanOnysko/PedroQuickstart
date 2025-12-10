@@ -6,4 +6,8 @@ public class LinkedState extends Link {
         this.trigger = timeout;
         this.nextState = nextState;
     }
+    public LinkedState(Link.LinkType type, BobState nextState) {
+        this.type = type;
+        this.nextState = nextState;
+    }
 }

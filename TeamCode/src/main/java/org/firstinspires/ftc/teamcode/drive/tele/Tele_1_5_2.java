@@ -23,6 +23,7 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.LSERVO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.RPM_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.RPM_ZONE2;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.ROTATE_TO_GOAL;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_OFF;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_MATIC;
@@ -38,8 +39,8 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-@TeleOp(name = "1.5 Quals TeleOp")
-public class Tele_1_5 extends OpMode {
+@TeleOp(name = "1.5_2 Ethan shit")
+public class Tele_1_5_2 extends OpMode {
 
 
     TelemetryManager telemetryM;
@@ -87,7 +88,8 @@ public class Tele_1_5 extends OpMode {
 
         // pedro
         startPose = Objects.requireNonNullElseGet(bob.lastPose, () -> new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)));
-        follower = Constants.createFollower(hardwareMap);
+        boolean automatedDrive = false;
+        follower = bob.follower;
         follower.setStartingPose(startPose);
     }
 
@@ -106,6 +108,7 @@ public class Tele_1_5 extends OpMode {
         telemetryM.debug("Pedro Pose:  "+String.format("x=%.2f in, y=%.2f in, h=%.1f deg", currentPose.getX(), currentPose.getY(), Math.toDegrees(currentPose.getHeading())));
         telemetryM.update(telemetry);
 
+
         updateRotationCorrection();
         drive();
         if (!gamepad2.right_bumper) autoControl();
@@ -122,14 +125,15 @@ public class Tele_1_5 extends OpMode {
             double targetY = 138.4;
             double targetHeading = Math.atan2(targetY - pose.getY(), targetX - pose.getX());
             double currentHeading = pose.getHeading();
-                currentAngle = targetHeading - currentHeading;
-                rotationPower = rotationPID.tick(currentAngle);
+            currentAngle = targetHeading - currentHeading;
+            rotationPower = rotationPID.tick(currentAngle);
         } else {
             rotationPower = 0;
         }
 
         telemetry.update();
     }
+
     private void drive(){
         if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1) {
             // normal driving
@@ -173,6 +177,16 @@ public class Tele_1_5 extends OpMode {
         if (gamepad2.dpad_left && !lastGamepad2.dpad_left) bob.runMacro(SPINDEXER_LEFT);
         // spin 60
         if (gamepad2.dpad_up && !lastGamepad2.dpad_up) bob.runMacro(SPINDEXER_SIXTY);
+
+        //face shooter
+        if(gamepad1.dpad_up && !automatedDrive) {
+            bob.runMacro(ROTATE_TO_GOAL);
+            automatedDrive=true;
+        }
+
+        if (automatedDrive && !follower.isBusy()) {
+            automatedDrive=false;
+        }
 
     }
     private void autoControl(){
@@ -239,6 +253,7 @@ public class Tele_1_5 extends OpMode {
             else bob.runMacro(SHOOTER_ZONE2_MATIC);
         }
     }
+
     private void gamepadUpdate(){
         gamepad1History.add(gamepad1);
         gamepad2History.add(gamepad2);

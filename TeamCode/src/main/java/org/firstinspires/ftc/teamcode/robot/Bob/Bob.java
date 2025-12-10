@@ -6,7 +6,9 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.*;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierPoint;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.PathChain;
 import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -20,9 +22,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.helpers.PIDShooter;
 import org.firstinspires.ftc.teamcode.helpers.PIDSpindexer;
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Meccanum.Meccanum;
 import org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobState;
 import org.firstinspires.ftc.teamcode.robot.Bob.helpers.Link;
+import org.firstinspires.ftc.teamcode.robot.Bob.helpers.Path;
 
 @Configurable
 public class Bob extends Meccanum implements Robot {
@@ -49,15 +53,13 @@ public class Bob extends Meccanum implements Robot {
     public Servo light;
     public Servo lservo;
 
-
-    // Pedro Pathing
-    public Follower follower;
-
     public Telemetry tele;
     public boolean inited = false;
     public ElapsedTime runtime = new ElapsedTime();
 
+    // Pedro Shit
     public Pose lastPose;
+    public Follower follower;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -67,7 +69,6 @@ public class Bob extends Meccanum implements Robot {
         motorBackLeft = (DcMotorEx) hardwareMap.dcMotor.get("bl");
         motorFrontRight = (DcMotorEx) hardwareMap.dcMotor.get("fr");
         motorBackRight = (DcMotorEx) hardwareMap.dcMotor.get("br");
-
 
         motorFrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         motorBackRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -89,7 +90,6 @@ public class Bob extends Meccanum implements Robot {
         intake = (DcMotorEx) hardwareMap.dcMotor.get("intake");
         intake.setZeroPowerBehavior(BRAKE);
 
-
         c = hardwareMap.get(RevColorSensorV3.class, "color");
         c2 = hardwareMap.get(RevColorSensorV3.class, "light2");
 
@@ -109,12 +109,15 @@ public class Bob extends Meccanum implements Robot {
         intakeController.start();
         transferController.start();
 
+        follower = Constants.createFollower(hardwareMap);
         hw = hardwareMap;
         runtime.reset();
         inited = true;
     }
 
     public void tick() {
+        if (follower != null) {follower.update();}
+
         tickMacros();
       //  shooterController.shooterTick();
         spindexerController.spindexerTick();
@@ -123,6 +126,7 @@ public class Bob extends Meccanum implements Robot {
         proximityController.proximityTick();
         newShooterController.update();
     }
+
     public void updateLight(int n) {
         switch(n){
             case 0:
@@ -372,6 +376,7 @@ public class Bob extends Meccanum implements Robot {
     public boolean MACROING = false;
     public ElapsedTime macroTimer = new ElapsedTime();
     public int macroTimeout = INFINITY;
+    public char macroTimeoutType = 't';
 
     public void runMacro(BobState m) {
         if (macroTimer.milliseconds() < macroTimeout)
@@ -385,10 +390,17 @@ public class Bob extends Meccanum implements Robot {
         macroTimeout = INFINITY;
     }
     public void tickMacros() {
-        if (!MACROING && macroTimer.milliseconds() > macroTimeout && macroTimeout != INFINITY) {
-            macroTimeout = INFINITY;
-            MACROING = true;
+        if (macroTimeoutType == 't') {
+            if (!MACROING && macroTimer.milliseconds() > macroTimeout && macroTimeout != INFINITY) {
+                macroTimeout = INFINITY;
+                MACROING = true;
+            }
+        } else if (macroTimeoutType == 'p') {
+            if (!MACROING && !follower.isBusy()) {
+                MACROING = true;
+            }
         }
+
 
         if (MACROING) {
             BobState m = macroState;
@@ -422,17 +434,47 @@ public class Bob extends Meccanum implements Robot {
                 }
             }
 
-            if (m.linkedState != null && m.linkedState.type == Link.LinkType.WAIT) {
-                macroTimer.reset();
-                macroTimeout = m.linkedState.trigger;
-                macroState = m.linkedState.nextState;
+            if (m.path != null && !follower.isBusy()) {
+                if (m.path.pathType == Path.PathType.ROTATE) {
+                    if (m.path.pose != null) {
+                        Pose pose = follower.getPose();
+
+                        double targetX = m.path.pose.getX();
+                        double targetY = m.path.pose.getY();
+
+                        double targetHeading = Math.atan2(
+                                targetY - pose.getY(),
+                                targetX - pose.getX()
+                        );
+
+                        PathChain chain = follower.pathBuilder()
+                                .addPath(
+                                        new BezierPoint(pose)
+                                )
+                                .setConstantHeadingInterpolation(targetHeading)
+                                .build();
+
+                        follower.followPath(chain);
+                    }
+                }
+            }
+            if (m.linkedState != null) {
+                if (m.linkedState.type == Link.LinkType.WAIT) {
+                    macroTimer.reset();
+                    macroTimeout = m.linkedState.trigger;
+                    macroState = m.linkedState.nextState;
+                    macroTimeoutType = 't';
+                } else if (m.linkedState.type == Link.LinkType.WAIT_FOR_PATH) {
+                    macroState = m.linkedState.nextState;
+                    macroTimeoutType = 'p';
+                }
+
             }
 
             MACROING = false;
         }
     }
     public void tickWithMacros() {
-        if (follower != null) follower.update();
         tickMacros();
        // shooterController.shooterTick();
         spindexerController.spindexerTick();

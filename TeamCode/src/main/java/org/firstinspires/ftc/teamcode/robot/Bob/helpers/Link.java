@@ -6,6 +6,8 @@ public abstract class Link {
     public LinkType type = LinkType.WAIT;
 
     public enum LinkType {
-        WAIT
+        WAIT,
+        WAIT_FOR_PATH,
+
     }
 }
