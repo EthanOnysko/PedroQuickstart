@@ -45,7 +45,6 @@ public class Auto_1_1Blue extends OpMode {
     private int intakeState = 0;
     private boolean waiting2 = false;
 
-    // Start pose mirrored from red side
     private final Pose startPose = mirrorRedToBlue(
             new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90))
     );
@@ -66,15 +65,14 @@ public class Auto_1_1Blue extends OpMode {
     public PathChain park;
     public PathChain Path100;
 
-    // Mirror across the horizontal center line (y = 72)
     private static Pose mirrorRedToBlue(Pose red) {
         double x = red.getX();
         double y = red.getY();
-        double h = red.getHeading(); // radians
+        double h = red.getHeading();
 
         double newX = x;
-        double newY = FIELD_SIZE - y; // reflect y across middle
-        double newH = -h;             // flip heading front/back
+        double newY = FIELD_SIZE - y;
+        double newH = -h;
 
         // normalize to [-π, π)
         if (newH > Math.PI) newH -= 2 * Math.PI;
@@ -84,7 +82,7 @@ public class Auto_1_1Blue extends OpMode {
     }
 
     private void endAuto() {
-        if (finished) return;  // make it idempotent
+        if (finished) return;  
 
         finished = true;
         bob.lastPose = follower.getPose();
