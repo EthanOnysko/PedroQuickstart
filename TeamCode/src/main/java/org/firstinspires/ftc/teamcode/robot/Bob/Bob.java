@@ -59,6 +59,7 @@ public class Bob extends Meccanum implements Robot {
     public ElapsedTime runtime = new ElapsedTime();
 
     public Pose lastPose;
+    public double lastSpindexerTicks;
 
     @Override
     public void init(HardwareMap hardwareMap) {
@@ -189,9 +190,9 @@ public class Bob extends Meccanum implements Robot {
     public class ProximityController {
         private boolean isBall;
         public void proximityTick(){
-            isBall = (c.getDistance(DistanceUnit.MM) < BALL_PROX
+            isBall = c.getDistance(DistanceUnit.MM) < BALL_PROX
                     || c2.getDistance(DistanceUnit.MM) < BALL_PROX
-            || c2.getDistance(DistanceUnit.MM) < BALL_PROX);
+                    || c3.getDistance(DistanceUnit.MM) < BALL_PROX;
         }
         public boolean isBall(){
             return isBall;

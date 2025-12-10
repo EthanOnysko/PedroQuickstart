@@ -30,7 +30,7 @@ public class BobConstants {
     public static double SPINDEX_EMERGENCY_POWER_LIMIT = 0.6;
 
     // ==================== TRANSFER ====================
-    public static double TRANSFER_UP = 0.35;
+    public static double TRANSFER_UP = 0.43;
     public static double TRANSFER_DOWN = 0.1;
     public static double TRANSFER_PULSE_TIME = 300; // milliseconds
 
@@ -38,7 +38,7 @@ public class BobConstants {
     public static double INTAKE_POWER_IN = -0.8;
     public static double INTAKE_POWER_OUT = 0.8;
     public static double INTAKE_POWER_OFF = 0;
-    public static double BALL_PROX = 15;
+    public static double BALL_PROX = 20;
 
 
     // ==================== MISC ====================

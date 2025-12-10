@@ -43,12 +43,12 @@ public class Tele_1_5 extends OpMode {
 
 
     TelemetryManager telemetryM;
-
+    Bob bob = new Bob();
     Limelight3A limelight;
     private Timer macroTimer, actionTimer, opmodeTimer;
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();
     Deque<Gamepad> gamepad1History = new LinkedList<>(), gamepad2History = new LinkedList<>();
-    private PID rotationPID = new PID(2,0,.05);
+    private PID rotationPID = new PID(1.7,0,.08);
     private boolean rotationCorrectionOn = false;
     private double rotationPower = 0;
     private double currentAngle = 0;
@@ -67,7 +67,6 @@ public class Tele_1_5 extends OpMode {
     // Pedro
     private Pose startPose;
     private Follower follower;
-    Bob bob = new Bob();
 
     private Supplier<PathChain> pathChain;
     private boolean automatedDrive = false;
@@ -86,7 +85,7 @@ public class Tele_1_5 extends OpMode {
         macroTimer = new Timer();
 
         // pedro
-        startPose = Objects.requireNonNullElseGet(bob.lastPose, () -> new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)));
+        startPose = Objects.requireNonNullElseGet(bob.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
     }
@@ -102,7 +101,11 @@ public class Tele_1_5 extends OpMode {
     public void loop() {
         if (gamepad2.start || gamepad1.start) return;
 
+        follower.update();
         Pose currentPose = follower.getPose();
+        telemetryM.debug("c1: "+ bob.c.getDistance(DistanceUnit.MM));
+        telemetryM.debug("c2: "+ bob.c2.getDistance(DistanceUnit.MM));
+        telemetryM.debug("c3: "+ bob.c3.getDistance(DistanceUnit.MM));
         telemetryM.debug("Pedro Pose:  "+String.format("x=%.2f in, y=%.2f in, h=%.1f deg", currentPose.getX(), currentPose.getY(), Math.toDegrees(currentPose.getHeading())));
         telemetryM.update(telemetry);
 
@@ -134,18 +137,18 @@ public class Tele_1_5 extends OpMode {
     private void drive(){
         if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1) {
             // normal driving
-            bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, -gamepad1.right_stick_x);
+            bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_bumper) {
             // slow
-            bob.motorDriveXYVectors(0.85 * -gamepad1.left_stick_x, 0.85 * gamepad1.left_stick_y, 0.4 * -gamepad1.right_stick_x);
+            bob.motorDriveXYVectors(0.85 * gamepad1.left_stick_x, 0.85 * -gamepad1.left_stick_y, 0.4 * gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_trigger > 0.1) {
             // limelight
             rotationCorrectionOn = true;
-            bob.motorDriveXYVectors(-gamepad1.left_stick_x, gamepad1.left_stick_y, rotationPower);
+            bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, rotationPower);
 
         }
     }
