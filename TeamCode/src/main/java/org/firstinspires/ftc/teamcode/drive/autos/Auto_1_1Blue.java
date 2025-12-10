@@ -82,7 +82,7 @@ public class Auto_1_1Blue extends OpMode {
     }
 
     private void endAuto() {
-        if (finished) return;  
+        if (finished) return;
 
         finished = true;
         bob.lastPose = follower.getPose();
