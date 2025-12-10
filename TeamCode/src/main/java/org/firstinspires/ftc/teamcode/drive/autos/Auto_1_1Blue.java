@@ -29,8 +29,8 @@ import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
 
 import java.util.List;
 
-@Autonomous(name = "RedAuto", group = "DecodeQual1")
-public class Auto_1_1 extends OpMode {
+@Autonomous(name = "BlueAuto", group = "DecodeQual1")
+public class Auto_1_1Blue extends OpMode {
     Bob bob = new Bob();
 
     private int greenBallTarget = 1;
@@ -325,7 +325,7 @@ public class Auto_1_1 extends OpMode {
                 }
                 break;
             case 9:
-                   waitThenRun(.5);
+                waitThenRun(.5);
 
                 break;
             case 10:
@@ -488,29 +488,29 @@ public class Auto_1_1 extends OpMode {
         endAuto();
     }
     private void obelisk() {
-            LLResult result = limelight.getLatestResult();
-            if (result != null && result.isValid()) {
-                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
-                for (LLResultTypes.FiducialResult fiducial : fiducials){
-                    int id = fiducial.getFiducialId();
-                    telemetry.addData("id: ", id);
+        LLResult result = limelight.getLatestResult();
+        if (result != null && result.isValid()) {
+            List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fiducial : fiducials){
+                int id = fiducial.getFiducialId();
+                telemetry.addData("id: ", id);
 
-                    switch(id){
-                        case 21:
-                            greenBallTarget = 1;
-                            telemetry.addData("greenyINS: ", greenBallTarget);
-                            break;
-                        case 22:
-                            greenBallTarget = 2;
-                            telemetry.addData("greenyINS: ", greenBallTarget);
-                            break;
-                        case 23:
-                            greenBallTarget = 3;
-                            telemetry.addData("greenyINS: ", greenBallTarget);
-                            break;
-                    }
+                switch(id){
+                    case 21:
+                        greenBallTarget = 1;
+                        telemetry.addData("greenyINS: ", greenBallTarget);
+                        break;
+                    case 22:
+                        greenBallTarget = 2;
+                        telemetry.addData("greenyINS: ", greenBallTarget);
+                        break;
+                    case 23:
+                        greenBallTarget = 3;
+                        telemetry.addData("greenyINS: ", greenBallTarget);
+                        break;
                 }
             }
+        }
 
         telemetry.update();
     }
