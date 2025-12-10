@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_
 
 import java.util.Deque;
 import java.util.LinkedList;
-@TeleOp(name = "1.4 - Quals TeleOp")
+@TeleOp(name = "1.4")
 public class Tele_1_4 extends OpMode {
 
     Bob bob = new Bob();
