@@ -33,10 +33,10 @@ public class QualAutoPaths {
 
     // Path1
     public static final Pose P1_START = new Pose(86.646, 9.354);
-    public static final Pose P1_END   = new Pose(72.123, 71.877);
+    public static final Pose P1_END   = new Pose(85, 85); //(72, 72)
 
     // Path2
-    public static final Pose P2_A = new Pose(72.123, 71.877);
+    public static final Pose P2_A = new Pose(85, 85); //(72, 72)
     public static final Pose P2_B = new Pose(83.938, 82.708);
     public static final Pose P2_C = new Pose(95, 83.692);
 
@@ -55,10 +55,10 @@ public class QualAutoPaths {
     // Path4
     public static final Pose P4_A = new Pose(117, 83.692);
     public static final Pose P4_B = new Pose(89.600, 83.446);
-    public static final Pose P4_C = new Pose(72.123, 72.123);
+    public static final Pose P4_C = new Pose(85, 85);
 
     // SpikeMark2
-    public static final Pose SM2_START = new Pose(72.123, 72.123);
+    public static final Pose SM2_START = new Pose(85, 85);
     public static final Pose SM2_END   = new Pose(95.000, 60.000);
 
     // SpikeMark21
@@ -75,10 +75,10 @@ public class QualAutoPaths {
 
     // SpikeMark24
     public static final Pose SM24_START = new Pose(117.000, 60.000);
-    public static final Pose SM24_END   = new Pose(72.000, 72.000);
+    public static final Pose SM24_END   = new Pose(85, 85);
 
     // Park
-    public static final Pose PARK_START = new Pose(72, 72);
+    public static final Pose PARK_START = new Pose(85, 85);
     public static final Pose PARK_END   = new Pose(95, 37);
 
     // -------- BUILD RED PATHCHAINS -------- //

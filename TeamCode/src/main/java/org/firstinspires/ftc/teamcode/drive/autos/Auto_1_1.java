@@ -73,7 +73,10 @@ public class Auto_1_1 extends OpMode {
         Path1 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(86.646, 9.354), new Pose(72.123, 71.877))
+                        new BezierLine(
+                                new Pose(86.646, 9.354),
+                                new Pose(85, 85)) //(72, 72)
+
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(45))
                 .build();
@@ -82,7 +85,7 @@ public class Auto_1_1 extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(72.123, 71.877),
+                                new Pose(85, 85), //(72, 72)
                                 new Pose(83.938, 82.708),
                                 new Pose(95, 83.692)
                         )
@@ -130,7 +133,7 @@ public class Auto_1_1 extends OpMode {
                         new BezierCurve(
                                 new Pose(125, 83.692),
                                 new Pose(89.600, 83.446),
-                                new Pose(72.123, 72.123)
+                                new Pose(85, 85)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
@@ -139,7 +142,7 @@ public class Auto_1_1 extends OpMode {
         SpikeMark2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(72.123, 72.123), new Pose(95.000, 60.000))
+                        new BezierLine(new Pose(85, 85), new Pose(95.000, 60.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .build();
@@ -171,14 +174,14 @@ public class Auto_1_1 extends OpMode {
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(125.000, 60.000), new Pose(72.000, 72.000))
+                        new BezierLine(new Pose(117.000, 60.000), new Pose(85, 85))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
         park = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(72, 72), new Pose(95, 37))
+                        new BezierLine(new Pose(85, 85), new Pose(95, 37))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .build();
