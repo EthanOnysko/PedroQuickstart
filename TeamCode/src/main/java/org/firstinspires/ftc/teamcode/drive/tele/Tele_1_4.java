@@ -125,7 +125,14 @@ public class Tele_1_4 extends OpMode {
         }
     }
     private void manualControl(){
-        if (gamepad2.left_trigger > 0) bob.spindexer.setPower(gamepad2.left_trigger*.3);
+        if (gamepad2.left_trigger > 0.05 || gamepad2.right_trigger > 0.05) {
+            bob.manualReset = true;
+            double leftP = gamepad2.left_trigger*.1;
+            double rightP = gamepad2.right_trigger*.1;
+            bob.spindexerController.manualPower(Math.max(leftP, rightP));
+            bob.spindexerController.resetEncoder();
+        }
+        else bob.manualReset = false;
 
 
         if (gamepad2.left_bumper && !lastGamepad2.left_bumper) {
