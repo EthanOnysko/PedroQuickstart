@@ -52,7 +52,6 @@ public class Bob extends Meccanum implements Robot {
 
     public boolean manualReset = false;
 
-
     public double manualPower = 0;
     // Pedro Pathing
     public Follower follower;
@@ -61,11 +60,12 @@ public class Bob extends Meccanum implements Robot {
     public boolean inited = false;
     public ElapsedTime runtime = new ElapsedTime();
 
-    public Pose lastPose;
-    public double lastSpindexerTicks;
-
     @Override
     public void init(HardwareMap hardwareMap) {
+        init(hardwareMap, true);
+    }
+
+    public void init(HardwareMap hardwareMap, boolean resetSpindexer) {
         super.init(hardwareMap);
 
         motorFrontLeft = (DcMotorEx) hardwareMap.dcMotor.get("fl");
@@ -101,7 +101,9 @@ public class Bob extends Meccanum implements Robot {
 
         spindexer = hardwareMap.get(CRServo.class, "spindexer");
         spincoder = hardwareMap.get(DcMotorEx.class, "spincoder"); // Using back left as encoder
-        spincoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        if (resetSpindexer) {
+            spincoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
         spincoder.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         transfer = hardwareMap.get(Servo.class, "transfer");

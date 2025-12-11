@@ -32,7 +32,7 @@ import java.util.List;
 
 @Autonomous(name = "RedAuto", group = "DecodeQual1")
 public class Auto_1_1 extends OpMode {
-    private final Bob bob = RobotContext.bob;
+    private final Bob bob = new Bob();
 
     private int greenBallTarget = 1;
     private boolean waiting = false;
@@ -65,13 +65,11 @@ public class Auto_1_1 extends OpMode {
         if (finished) return;  // make it idempotent
 
         finished = true;
-        bob.lastPose = follower.getPose();
-
+        RobotContext.lastPose = follower.getPose();
+        RobotContext.lastSpindexerTicks = bob.spincoder.getCurrentPosition();
     }
 
     public void buildPaths() {
-
-
         Path1 = follower
                 .pathBuilder()
                 .addPath(
@@ -112,7 +110,6 @@ public class Auto_1_1 extends OpMode {
                                 new Pose(112, 83.692)
                         )
                 )
-
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
         Path3_5_5 = follower
@@ -120,7 +117,7 @@ public class Auto_1_1 extends OpMode {
                 .addPath(
                         new BezierLine(
                                 new Pose(112, 83.692),
-                                new Pose(117, 83.692)
+                                new Pose(125, 83.692)
                         )
                 )
 
@@ -131,7 +128,7 @@ public class Auto_1_1 extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(117, 83.692),
+                                new Pose(125, 83.692),
                                 new Pose(89.600, 83.446),
                                 new Pose(72.123, 72.123)
                         )
@@ -166,7 +163,7 @@ public class Auto_1_1 extends OpMode {
         SpikeMark23 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(112.000, 60.000), new Pose(117.000, 60.000))
+                        new BezierLine(new Pose(112.000, 60.000), new Pose(125.000, 60.000))
                 )
                 .setTangentHeadingInterpolation()
                 .build();
@@ -174,7 +171,7 @@ public class Auto_1_1 extends OpMode {
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(117.000, 60.000), new Pose(72.000, 72.000))
+                        new BezierLine(new Pose(125.000, 60.000), new Pose(72.000, 72.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
