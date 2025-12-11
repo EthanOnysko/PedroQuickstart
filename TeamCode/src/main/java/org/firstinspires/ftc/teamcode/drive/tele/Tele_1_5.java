@@ -78,7 +78,7 @@ public class Tele_1_5 extends OpMode {
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
 
-        bob.init(hardwareMap);
+        bob.init(hardwareMap, false);
 
         rotationPID.init(0);
         rotationPID.setTarget(rotationTarget);
