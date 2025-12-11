@@ -43,7 +43,7 @@ import java.util.function.Supplier;
 public class Tele_1_5 extends OpMode {
 
     TelemetryManager telemetryM;
-    private final Bob bob = RobotContext.bob;
+    private final Bob bob = new Bob();
     Limelight3A limelight;
     private Timer macroTimer, actionTimer, opmodeTimer;
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();
@@ -78,6 +78,8 @@ public class Tele_1_5 extends OpMode {
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
 
+        bob.init(hardwareMap);
+
         rotationPID.init(0);
         rotationPID.setTarget(rotationTarget);
         rotationPID.setDoneThresholds(rotationErrorThresh, rotationDerivativeThresh);
@@ -85,7 +87,7 @@ public class Tele_1_5 extends OpMode {
         macroTimer = new Timer();
 
         // pedro
-        startPose = Objects.requireNonNullElseGet(bob.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
+        startPose = Objects.requireNonNullElseGet(RobotContext.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
@@ -94,7 +96,7 @@ public class Tele_1_5 extends OpMode {
     }
 
     public void init_loop() {
-        telemetryM.debug("bob LastPose: "+bob.lastPose);
+        telemetryM.debug("LastPose: "+RobotContext.lastPose);
         telemetryM.update();
     }
     @Override

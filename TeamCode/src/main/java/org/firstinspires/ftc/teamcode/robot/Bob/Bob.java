@@ -61,9 +61,6 @@ public class Bob extends Meccanum implements Robot {
     public boolean inited = false;
     public ElapsedTime runtime = new ElapsedTime();
 
-    public Pose lastPose;
-    public double lastSpindexerTicks;
-
     @Override
     public void init(HardwareMap hardwareMap) {
         super.init(hardwareMap);

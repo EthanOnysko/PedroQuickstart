@@ -29,7 +29,6 @@ public class Constants {
             .translationalPIDFCoefficients(new PIDFCoefficients(0.19,0,0.02,0.03))
             .headingPIDFCoefficients(new PIDFCoefficients(1.55,0,.1,.02))
             .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.02,0,0.0001,1,0))
-
             .centripetalScaling(0.0003);
 
     public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
@@ -46,7 +45,8 @@ public class Constants {
             .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(71.71)
-            .yVelocity(57.54);
+            .yVelocity(57.54)
+            .useBrakeModeInTeleOp(true);
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(7.4)
             .strafePodX(8.4)

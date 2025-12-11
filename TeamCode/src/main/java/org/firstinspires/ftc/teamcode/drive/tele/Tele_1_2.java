@@ -24,6 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.helpers.PID;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
+import org.firstinspires.ftc.teamcode.robot.RobotContext;
 
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.INTAKE_POWER_IN;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
@@ -90,9 +91,10 @@ public class Tele_1_2 extends OpMode {
         actionTimer = new Timer();
         macroTimer = new Timer();
 
-        startPose = Objects.requireNonNullElseGet(bob.lastPose, () -> new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)));
+        startPose = Objects.requireNonNullElseGet(RobotContext.lastPose, () -> new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)));
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
+        bob.follower = follower;
     }
 
     @Override

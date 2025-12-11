@@ -32,7 +32,7 @@ import java.util.List;
 
 @Autonomous(name = "RedAuto", group = "DecodeQual1")
 public class Auto_1_1 extends OpMode {
-    private final Bob bob = RobotContext.bob;
+    private final Bob bob = new Bob();
 
     private int greenBallTarget = 1;
     private boolean waiting = false;
@@ -65,13 +65,11 @@ public class Auto_1_1 extends OpMode {
         if (finished) return;  // make it idempotent
 
         finished = true;
-        bob.lastPose = follower.getPose();
-
+        RobotContext.lastPose = follower.getPose();
+        RobotContext.lastSpindexerTicks = bob.spincoder.getCurrentPosition();
     }
 
     public void buildPaths() {
-
-
         Path1 = follower
                 .pathBuilder()
                 .addPath(

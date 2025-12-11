@@ -32,7 +32,7 @@ import java.util.List;
 
 @Autonomous(name = "BlueAuto", group = "DecodeQual1")
 public class Auto_1_1Blue extends OpMode {
-    private final Bob bob = RobotContext.bob;
+    private final Bob bob = new Bob();
 
     private static final double FIELD_SIZE = 144.0; // full field size in inches (0–144)
 
@@ -86,8 +86,8 @@ public class Auto_1_1Blue extends OpMode {
         if (finished) return;
 
         finished = true;
-        bob.lastPose = follower.getPose();
-        bob.lastSpindexerTicks = bob.spincoder.getCurrentPosition();
+        RobotContext.lastPose = follower.getPose();
+        RobotContext.lastSpindexerTicks = bob.spincoder.getCurrentPosition();
 
     }
 

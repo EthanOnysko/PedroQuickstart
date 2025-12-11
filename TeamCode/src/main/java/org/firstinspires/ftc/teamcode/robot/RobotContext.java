@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
+import com.pedropathing.geometry.Pose;
 
 /**
- * Holds shared robot instances so autonomous and teleop can reuse state such as last pose.
+ * Holds shared robot state (not hardware) so autonomous and teleop can reuse values like last pose.
  */
 public final class RobotContext {
-    public static final Bob bob = new Bob();
+    public static Pose lastPose;
+    public static Integer lastSpindexerTicks;
 
     private RobotContext() {
         // Utility class
