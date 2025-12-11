@@ -23,9 +23,9 @@ public class BobConstants {
 
     // ==================== SPINDEXER ====================
     public static double TICKS_PER_REV_SPINDEXER = 8192;
-    public static double SPINDEX_KP = 0.00032;
-    public static double SPINDEX_KI = 0;
-    public static double SPINDEX_KD = 0.00005;
+    public static double SPINDEX_KP = 0.00014;
+    public static double SPINDEX_KI = 0.000009;
+    public static double SPINDEX_KD = 0.000035;
 
     public static double SPINDEX_EMERGENCY_POWER_LIMIT = 0.6;
 
