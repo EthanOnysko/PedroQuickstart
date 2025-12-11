@@ -187,10 +187,9 @@ public class Auto_1_1 extends OpMode {
                 .build();
 
 
-
     }
 
-    public void waitSpike(double seconds){
+    public void waitSpike(double seconds) {
         if (!waiting2) {
             actionTimer.resetTimer();
             waiting2 = true;
@@ -200,7 +199,8 @@ public class Auto_1_1 extends OpMode {
             setI(intakeState + 1);
         }
     }
-    public void waitThenRun(double seconds){
+
+    public void waitThenRun(double seconds) {
         if (!waiting) {
             actionTimer.resetTimer();
             waiting = true;
@@ -214,14 +214,14 @@ public class Auto_1_1 extends OpMode {
     public void intakeSpikeMarks() {
         switch (intakeState) {
             case 0:
-                if (isSpike1) follower.followPath(Path3,.5,true);
-                else follower.followPath(SpikeMark21,.5,true);
+                if (isSpike1) follower.followPath(Path3, .5, true);
+                else follower.followPath(SpikeMark21, .5, true);
                 setI(1);
                 break;
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1) {
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(2);
                     }
@@ -233,28 +233,28 @@ public class Auto_1_1 extends OpMode {
                 waitSpike(.5);
                 break;
             case 3:
-                if (isSpike1) follower.followPath(Path3_5,.5,true);
-                else follower.followPath(SpikeMark22,.5,true);
+                if (isSpike1) follower.followPath(Path3_5, .5, true);
+                else follower.followPath(SpikeMark22, .5, true);
                 setI(4);
                 actionTimer.resetTimer();
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1) {
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(5);
                     }
                 }
                 break;
             case 6:
-                if (isSpike1) follower.followPath(Path3_5_5,.5,true);
-                else follower.followPath(SpikeMark23,.5,true);
+                if (isSpike1) follower.followPath(Path3_5_5, .5, true);
+                else follower.followPath(SpikeMark23, .5, true);
                 setI(7);
                 actionTimer.resetTimer();
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1){
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1) {
                         bob.intakeController.stopIntake();
                         if (isSpike1) {
                             pathState = 7;
@@ -269,6 +269,7 @@ public class Auto_1_1 extends OpMode {
 
         }
     }
+
     public void autoMain() {
         switch (pathState) {
             case 0:
@@ -293,7 +294,7 @@ public class Auto_1_1 extends OpMode {
                 break;
 
             case 4:
-                if (!follower.isBusy()){
+                if (!follower.isBusy()) {
                     waitThenRun(.5);
                 }
 
@@ -306,7 +307,7 @@ public class Auto_1_1 extends OpMode {
 
             case 7:
                 if (!follower.isBusy()) {
-                    switch (greenBallTarget){
+                    switch (greenBallTarget) {
                         case 1:
                             bob.runMacro(SHOOTER_ZONE1_AUTO_3_BOMBA);
                             break;
@@ -317,7 +318,7 @@ public class Auto_1_1 extends OpMode {
                             bob.runMacro(SHOOTER_ZONE1_AUTO_2_BOMBA);
                             break;
                     }
-                    follower.followPath(Path4,1,true);
+                    follower.followPath(Path4, 1, true);
                     setP(8);
 
                 }
@@ -328,7 +329,7 @@ public class Auto_1_1 extends OpMode {
                 }
                 break;
             case 9:
-                   waitThenRun(.5);
+                waitThenRun(.5);
 
                 break;
             case 10:
@@ -345,7 +346,7 @@ public class Auto_1_1 extends OpMode {
                 break;
 
             case 13:
-                if (!follower.isBusy()){
+                if (!follower.isBusy()) {
                     intakeState = 0;
                     isSpike1 = false;
                     waitThenRun(.5);
@@ -357,7 +358,7 @@ public class Auto_1_1 extends OpMode {
             case 15:
                 if (!follower.isBusy()) {
 
-                    switch (greenBallTarget){
+                    switch (greenBallTarget) {
                         case 1:
                             bob.runMacro(SHOOTER_ZONE1_AUTO_BOMBA);
                             break;
@@ -368,7 +369,7 @@ public class Auto_1_1 extends OpMode {
                             bob.runMacro(SHOOTER_ZONE1_AUTO_3_BOMBA);
                             break;
                     }
-                    follower.followPath(SpikeMark24,1,true);
+                    follower.followPath(SpikeMark24, 1, true);
                     setP(16);
 
                 }
@@ -401,7 +402,6 @@ public class Auto_1_1 extends OpMode {
     }
 
 
-
     public void setI(int i) {
         intakeState = i;
     }
@@ -410,16 +410,18 @@ public class Auto_1_1 extends OpMode {
         pathState = p;
         pathTimer.resetTimer();
     }
+
     public int getP() {
         return pathState;
     }
 
-    public void bigTick(){
+    public void bigTick() {
         follower.update();
         autoMain();
         bob.tick();
 
     }
+
     @Override
     public void loop() {
 
@@ -450,12 +452,16 @@ public class Auto_1_1 extends OpMode {
         limelight.start();
 
         follower = Constants.createFollower(hardwareMap);
-        buildPaths();
         follower.setStartingPose(startPose);
+        bob.follower = follower;
+
+        buildPaths();
 
     }
 
-    /** This method is called continuously after Init while waiting for "play". **/
+    /**
+     * This method is called continuously after Init while waiting for "play".
+     **/
     @Override
     public void init_loop() {
         obelisk();
@@ -463,11 +469,13 @@ public class Auto_1_1 extends OpMode {
         telemetry.update();
     }
 
-    /** This method is called once at the start of the OpMode.
-     * It runs all the setup actions, including building paths and starting the path system **/
+    /**
+     * This method is called once at the start of the OpMode.
+     * It runs all the setup actions, including building paths and starting the path system
+     **/
     @Override
     public void start() {
-        switch (greenBallTarget){
+        switch (greenBallTarget) {
             case 1:
                 bob.runMacro(SHOOTER_ZONE1_AUTO);
                 break;
@@ -485,38 +493,37 @@ public class Auto_1_1 extends OpMode {
         setP(0);
     }
 
-    /** We do not use this because everything should automatically disable **/
+    /**
+     * We do not use this because everything should automatically disable
+     **/
     @Override
     public void stop() {
         endAuto();
     }
-    private void obelisk() {
-            LLResult result = limelight.getLatestResult();
-            if (result != null && result.isValid()) {
-                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
-                for (LLResultTypes.FiducialResult fiducial : fiducials){
-                    int id = fiducial.getFiducialId();
-                    telemetry.addData("id: ", id);
 
-                    switch(id){
-                        case 21:
-                            greenBallTarget = 1;
-                            telemetry.addData("greenyINS: ", greenBallTarget);
-                            break;
-                        case 22:
-                            greenBallTarget = 2;
-                            telemetry.addData("greenyINS: ", greenBallTarget);
-                            break;
-                        case 23:
-                            greenBallTarget = 3;
-                            telemetry.addData("greenyINS: ", greenBallTarget);
-                            break;
-                    }
+    private void obelisk() {
+        LLResult result = limelight.getLatestResult();
+        if (result != null && result.isValid()) {
+            List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+            for (LLResultTypes.FiducialResult fiducial : fiducials) {
+                int id = fiducial.getFiducialId();
+                telemetry.addData("id: ", id);
+
+                switch (id) {
+                    case 21:
+                        greenBallTarget = 1;
+                        telemetry.addData("greenyINS: ", greenBallTarget);
+                        break;
+                    case 22:
+                        greenBallTarget = 2;
+                        telemetry.addData("greenyINS: ", greenBallTarget);
+                        break;
+                    case 23:
+                        greenBallTarget = 3;
+                        telemetry.addData("greenyINS: ", greenBallTarget);
+                        break;
                 }
             }
-
-        telemetry.update();
+        }
     }
-
-
 }
