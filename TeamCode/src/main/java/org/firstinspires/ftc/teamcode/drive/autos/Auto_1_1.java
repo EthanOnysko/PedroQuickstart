@@ -46,6 +46,7 @@ public class Auto_1_1 extends OpMode {
     private final Pose startPose = new Pose(86.89230769230768, 9.353846153846153, Math.toRadians(90)); // Start Pose of our robot.
     private boolean finished = false;
 
+    public static double offset = 0;
     public PathChain Path1;
     public PathChain Path2;
     public PathChain Path3;
@@ -65,6 +66,7 @@ public class Auto_1_1 extends OpMode {
 
         finished = true;
         bob.lastPose = follower.getPose();
+
     }
 
     public void buildPaths() {
