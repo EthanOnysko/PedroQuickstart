@@ -78,8 +78,6 @@ public class Tele_1_5 extends OpMode {
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
 
-        bob.init(hardwareMap, false);
-
         rotationPID.init(0);
         rotationPID.setTarget(rotationTarget);
         rotationPID.setDoneThresholds(rotationErrorThresh, rotationDerivativeThresh);
@@ -93,6 +91,8 @@ public class Tele_1_5 extends OpMode {
         follower.setStartingPose(startPose);
 
         bob.follower = follower;
+
+        bob.init(hardwareMap, false);
     }
 
     public void init_loop() {
@@ -104,6 +104,7 @@ public class Tele_1_5 extends OpMode {
         bob.transferController.setDown();
         limelight.start();
         macroTimer.resetTimer();
+        bob.spindexerController.incrementAngle(60);
     }
 
     @Override
