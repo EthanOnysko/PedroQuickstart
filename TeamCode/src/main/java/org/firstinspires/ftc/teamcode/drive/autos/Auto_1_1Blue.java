@@ -98,7 +98,7 @@ public class Auto_1_1Blue extends OpMode {
                 .addPath(
                         new BezierLine(
                                 mirrorRedToBlue(new Pose(86.646, 9.354)),
-                                mirrorRedToBlue(new Pose(72.123, 71.877))
+                                mirrorRedToBlue(new Pose(85, 85))
                         )
                 )
                 .setLinearHeadingInterpolation(
@@ -111,7 +111,7 @@ public class Auto_1_1Blue extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                mirrorRedToBlue(new Pose(72.123, 71.877)),
+                                mirrorRedToBlue(new Pose(85, 85)),
                                 mirrorRedToBlue(new Pose(83.938, 82.708)),
                                 mirrorRedToBlue(new Pose(95, 83.692))
                         )
@@ -170,7 +170,7 @@ public class Auto_1_1Blue extends OpMode {
                         new BezierCurve(
                                 mirrorRedToBlue(new Pose(117, 83.692)),
                                 mirrorRedToBlue(new Pose(89.600, 83.446)),
-                                mirrorRedToBlue(new Pose(72.123, 72.123))
+                                mirrorRedToBlue(new Pose(85, 85))
                         )
                 )
                 .setLinearHeadingInterpolation(
@@ -183,7 +183,7 @@ public class Auto_1_1Blue extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                mirrorRedToBlue(new Pose(72.123, 72.123)),
+                                mirrorRedToBlue(new Pose(85, 85)),
                                 mirrorRedToBlue(new Pose(95.000, 60.000))
                         )
                 )
@@ -234,7 +234,7 @@ public class Auto_1_1Blue extends OpMode {
                 .addPath(
                         new BezierLine(
                                 mirrorRedToBlue(new Pose(117.000, 60.000)),
-                                mirrorRedToBlue(new Pose(72.000, 72.000))
+                                mirrorRedToBlue(new Pose(85, 85))
                         )
                 )
                 .setLinearHeadingInterpolation(
@@ -247,7 +247,7 @@ public class Auto_1_1Blue extends OpMode {
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                mirrorRedToBlue(new Pose(72, 72)),
+                                mirrorRedToBlue(new Pose(85, 85)),
                                 mirrorRedToBlue(new Pose(95, 37))
                         )
                 )

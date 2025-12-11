@@ -9,7 +9,7 @@ public class BobConstants {
     // ==================== SHOOTER ====================
     public static double TICKS_PER_REV_SHOOTER = 28;
     public static int RPM_ZONE1 = 2570;
-    public static int RPM_ZONE1_AUTO = 2700;
+    public static int RPM_ZONE1_AUTO = 2570;
     public static int RPM_ZONE2 = 3200;
     public static int RPM_OFF = 0;
     // ZONE 1 PID Values
