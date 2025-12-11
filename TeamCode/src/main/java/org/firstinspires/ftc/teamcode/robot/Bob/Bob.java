@@ -218,6 +218,9 @@ public class Bob extends Meccanum implements Robot {
             double currentTicks = spincoder.getCurrentPosition();
             spinPID.setTargetAngle(targetAngle, currentTicks);
         }
+        public double getTargetAngle() {
+            return (targetAngle/360.0) * TICKS_PER_REV_SPINDEXER;
+        }
 
         public void incrementAngle(double increment) {
             setTargetAngle(targetAngle + increment);

@@ -84,13 +84,31 @@ public class Tele_1_4 extends OpMode {
         if (gamepad2.start || gamepad1.start) return;
         updateRotationCorrection();
         drive();
-        if (!gamepad2.right_bumper) autoControl();
+        if (!gamepad2.right_bumper) {
+            bob.manualReset = false;
+            autoControl();
+        }
         else manualControl();
+
+        telemetryM.debug("encoder ticks: "+ bob.spincoder.getCurrentPosition());
+        telemetryM.debug("target ticks: "+ bob.spindexerController.getTargetAngle());
+        telemetryM.update(telemetry);
 
         bob.tick();
         gamepadUpdate();
     }
 
+    private void resetEncoder(){
+        if ((gamepad2.left_trigger > 0 || gamepad2.right_trigger > 0)) {
+            bob.manualReset = true;
+            if (gamepad2.right_trigger > 0) bob.spindexerController.manualPower(-.08);
+            else if (gamepad2.left_trigger > 0) bob.spindexerController.manualPower(.08);
+            else bob.spindexerController.manualPower(0);
+            bob.spindexerController.resetEncoder();
+        }
+
+        else bob.manualReset = false;
+    }
     private void updateRotationCorrection() {
         if (rotationCorrectionOn) {
             LLResult result = limelight.getLatestResult();
@@ -125,16 +143,9 @@ public class Tele_1_4 extends OpMode {
         }
     }
     private void manualControl(){
-        if (gamepad2.left_trigger > 0.05 || gamepad2.right_trigger > 0.05) {
-            bob.manualReset = true;
-            double leftP = gamepad2.left_trigger*.1;
-            double rightP = gamepad2.right_trigger*.1;
-            bob.spindexerController.manualPower(Math.max(leftP, rightP));
-            bob.spindexerController.resetEncoder();
-        }
-        else bob.manualReset = false;
 
 
+        resetEncoder();
         if (gamepad2.left_bumper && !lastGamepad2.left_bumper) {
             transfer = !transfer;
             if (transfer) bob.transferController.setUp();
