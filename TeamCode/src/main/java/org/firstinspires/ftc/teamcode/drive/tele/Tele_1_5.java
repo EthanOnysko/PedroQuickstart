@@ -77,7 +77,7 @@ public class Tele_1_5 extends OpMode {
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
         limelight.setPollRateHz(100);
         limelight.pipelineSwitch(0);
-        bob.init(hardwareMap);
+
         rotationPID.init(0);
         rotationPID.setTarget(rotationTarget);
         rotationPID.setDoneThresholds(rotationErrorThresh, rotationDerivativeThresh);
@@ -86,10 +86,17 @@ public class Tele_1_5 extends OpMode {
 
         // pedro
         startPose = Objects.requireNonNullElseGet(bob.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
+
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
+
+        bob.follower = follower;
     }
 
+    public void init_loop() {
+        telemetryM.debug("bob LastPose: "+bob.lastPose);
+        telemetryM.update();
+    }
     @Override
     public void start() {
         bob.transferController.setDown();
@@ -107,6 +114,8 @@ public class Tele_1_5 extends OpMode {
         telemetryM.debug("c2: "+ bob.c2.getDistance(DistanceUnit.MM));
         telemetryM.debug("c3: "+ bob.c3.getDistance(DistanceUnit.MM));
         telemetryM.debug("Pedro Pose:  "+String.format("x=%.2f in, y=%.2f in, h=%.1f deg", currentPose.getX(), currentPose.getY(), Math.toDegrees(currentPose.getHeading())));
+
+
         telemetryM.update(telemetry);
 
 
