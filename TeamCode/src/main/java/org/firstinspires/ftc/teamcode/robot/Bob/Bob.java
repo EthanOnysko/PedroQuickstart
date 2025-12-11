@@ -50,7 +50,10 @@ public class Bob extends Meccanum implements Robot {
     public Servo light;
     public Servo lservo;
 
+    public boolean manualReset = false;
 
+
+    public double manualPower = 0;
     // Pedro Pathing
     public Follower follower;
 
@@ -220,16 +223,27 @@ public class Bob extends Meccanum implements Robot {
             setTargetAngle(targetAngle + increment);
         }
 
+        public void manualPower(double p){
+            manualPower = p;
+        }
+       public void resetEncoder(){
+           spincoder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
         public void spindexerTick() {
             double currentTicks = spincoder.getCurrentPosition();
             spinPID.setTargetAngle(targetAngle, currentTicks);
 
             double power = -spinPID.update(currentTicks);
 
-            if (emergencyMode && (power > 0.1 || power < -0.1)) {
-                spindexer.setPower(power * SPINDEX_EMERGENCY_POWER_LIMIT);
-            } else {
-                spindexer.setPower(power);
+            if (!manualReset) {
+                if (emergencyMode && (power > 0.1 || power < -0.1)) {
+                    spindexer.setPower(power * SPINDEX_EMERGENCY_POWER_LIMIT);
+                } else {
+                    spindexer.setPower(power);
+                }
+            }
+            else{
+                spindexer.setPower(manualPower);
             }
 
             double wrappedTicks = currentTicks % TICKS_PER_REV_SPINDEXER;
