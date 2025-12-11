@@ -26,12 +26,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
+import org.firstinspires.ftc.teamcode.robot.RobotContext;
 
 import java.util.List;
 
 @Autonomous(name = "BlueAuto", group = "DecodeQual1")
 public class Auto_1_1Blue extends OpMode {
-    Bob bob = new Bob();
+    private final Bob bob = RobotContext.bob;
 
     private static final double FIELD_SIZE = 144.0; // full field size in inches (0–144)
 

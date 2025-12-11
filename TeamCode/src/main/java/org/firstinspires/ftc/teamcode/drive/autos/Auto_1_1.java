@@ -22,16 +22,17 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import  com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.robot.Bob.Bob;
+import org.firstinspires.ftc.teamcode.robot.RobotContext;
 
 import java.util.List;
 
 @Autonomous(name = "RedAuto", group = "DecodeQual1")
 public class Auto_1_1 extends OpMode {
-    Bob bob = new Bob();
+    private final Bob bob = RobotContext.bob;
 
     private int greenBallTarget = 1;
     private boolean waiting = false;
@@ -517,4 +518,3 @@ public class Auto_1_1 extends OpMode {
 
 
 }
-
