@@ -27,7 +27,7 @@ public class BobConstants {
     public static double SPINDEX_KI = 0.000009;
     public static double SPINDEX_KD = 0.000035;
 
-    public static double SPINDEX_EMERGENCY_POWER_LIMIT = 0.6;
+    public static double SPINDEX_EMERGENCY_POWER_LIMIT = 0.3;
 
     // ==================== TRANSFER ====================
     public static double TRANSFER_UP = 0.43;
