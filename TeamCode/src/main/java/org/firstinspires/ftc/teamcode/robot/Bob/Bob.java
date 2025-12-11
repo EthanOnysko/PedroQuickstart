@@ -52,7 +52,6 @@ public class Bob extends Meccanum implements Robot {
 
     public boolean manualReset = false;
 
-
     public double manualPower = 0;
     // Pedro Pathing
     public Follower follower;
