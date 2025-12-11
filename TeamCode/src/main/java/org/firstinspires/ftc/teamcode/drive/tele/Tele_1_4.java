@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SPINDEXER_
 
 import java.util.Deque;
 import java.util.LinkedList;
-@TeleOp(name = "Qual1Tele", group = "DecodeQual1")
+@TeleOp(name = "1.4 - Qual1Tele")
 public class Tele_1_4 extends OpMode {
 
     Bob bob = new Bob();
@@ -125,6 +125,9 @@ public class Tele_1_4 extends OpMode {
         }
     }
     private void manualControl(){
+        if (gamepad2.left_trigger > 0) bob.spindexer.setPower(gamepad2.left_trigger*.3);
+
+
         if (gamepad2.left_bumper && !lastGamepad2.left_bumper) {
             transfer = !transfer;
             if (transfer) bob.transferController.setUp();
@@ -210,10 +213,6 @@ public class Tele_1_4 extends OpMode {
             }
         }
 
-        if (numBalls == 4 && (gamepad2.y || gamepad2.a)){
-            if (isZoneOne) bob.runMacro(SHOOTER_ZONE1_MATIC);
-            else bob.runMacro(SHOOTER_ZONE2_MATIC);
-        }
     }
     private void gamepadUpdate(){
         gamepad1History.add(gamepad1);

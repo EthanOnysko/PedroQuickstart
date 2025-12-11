@@ -38,7 +38,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-@TeleOp(name = "1.5 Quals TeleOp")
+@TeleOp(name = "1.5 TeleOp (not in use)")
 public class Tele_1_5 extends OpMode {
 
 
@@ -238,10 +238,7 @@ public class Tele_1_5 extends OpMode {
             }
         }
 
-        if (numBalls == 4 && (gamepad2.y || gamepad2.a)){
-            if (isZoneOne) bob.runMacro(SHOOTER_ZONE1_MATIC);
-            else bob.runMacro(SHOOTER_ZONE2_MATIC);
-        }
+
     }
     private void gamepadUpdate(){
         gamepad1History.add(gamepad1);
