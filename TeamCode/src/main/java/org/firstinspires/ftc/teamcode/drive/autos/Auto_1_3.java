@@ -221,7 +221,7 @@ public class Auto_1_3 extends OpMode {
     public void ramThatFucker() {
         switch (ram) {
             case 0:
-                follower.followPath(ramPath);
+                follower.followPath(ramPath,1,true);
                 ram++;
                 break;
             case 1:
