@@ -354,7 +354,7 @@ public class Auto_1_1Blue extends OpMode {
                 break;
             case 2:
             case 11:
-                waitThenRun(2.7);
+                waitThenRun(3.2);
                 break;
 
             case 3:
@@ -457,7 +457,7 @@ public class Auto_1_1Blue extends OpMode {
 
                 break;
             case 19:
-                waitThenRun(2.7);
+                waitThenRun(3.2);
                 break;
             case 20:
                 follower.followPath(park);

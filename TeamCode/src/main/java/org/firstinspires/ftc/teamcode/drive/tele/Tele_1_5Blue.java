@@ -39,8 +39,8 @@ import java.util.LinkedList;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-@TeleOp(name = "1.5 TeleOp (Red)")
-public class Tele_1_5 extends OpMode {
+@TeleOp(name = "1.5 TeleOp (Blue)")
+public class Tele_1_5Blue extends OpMode {
 
     TelemetryManager telemetryM;
     private final Bob bob = new Bob();
@@ -85,8 +85,8 @@ public class Tele_1_5 extends OpMode {
         macroTimer = new Timer();
 
         // pedro
-      //  startPose = Objects.requireNonNullElseGet(RobotContext.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
-        startPose = Objects.requireNonNullElseGet(null, () -> new Pose(95, 37, Math.toRadians(0)));
+        //  startPose = Objects.requireNonNullElseGet(RobotContext.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
+        startPose = Objects.requireNonNullElseGet(null, () -> new Pose(49, 37, Math.toRadians(180)));
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
@@ -135,12 +135,12 @@ public class Tele_1_5 extends OpMode {
     private void updateRotationCorrection() {
         if (rotationCorrectionOn) {
             Pose pose = follower.getPose();
-            double targetX = 133.4;
+            double targetX = 13;
             double targetY = 138.4;
             double targetHeading = Math.atan2(targetY - pose.getY(), targetX - pose.getX());
             double currentHeading = pose.getHeading();
-                currentAngle = targetHeading - currentHeading;
-                rotationPower = rotationPID.tick(currentAngle);
+            currentAngle = targetHeading - currentHeading;
+            rotationPower = rotationPID.tick(currentAngle);
         } else {
             rotationPower = 0;
         }
@@ -221,10 +221,7 @@ public class Tele_1_5 extends OpMode {
             else bob.runMacro(SHOOTER_ZONE2_MATIC);
         }
         //shooting all 3 balls
-        if (((gamepad2.left_bumper && !lastGamepad2.left_bumper) || (gamepad1.left_bumper && !lastGamepad1.left_bumper)) &&
-                numBalls < 3) {
-            numBalls = 3;
-        }
+
         if (((gamepad2.left_bumper && !lastGamepad2.left_bumper) || (gamepad1.left_bumper && !lastGamepad1.left_bumper)) &&
                 numBalls == 4) {
             bob.runMacro(SHOOT_ALL_THREE);

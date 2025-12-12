@@ -136,13 +136,15 @@ public class Auto_1_1 extends OpMode {
                                 new Pose(85, 85)
                         )
                 )
+                .setBrakingStrength(5)
+
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
 
                 .build();
         SpikeMark2 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(85, 85), new Pose(95.000, 60.000))
+                        new BezierLine(new Pose(85, 85), new Pose(95, 60.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
                 .build();
@@ -150,7 +152,7 @@ public class Auto_1_1 extends OpMode {
         SpikeMark21 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(95.000, 60.000), new Pose(107.000, 60.000))
+                        new BezierLine(new Pose(95, 60.000), new Pose(107.000, 60.000))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
@@ -214,14 +216,14 @@ public class Auto_1_1 extends OpMode {
     public void intakeSpikeMarks() {
         switch (intakeState) {
             case 0:
-                if (isSpike1) follower.followPath(Path3, .5, true);
-                else follower.followPath(SpikeMark21, .5, true);
+                if (isSpike1) follower.followPath(Path3, .35, true);
+                else follower.followPath(SpikeMark21, .35, true);
                 setI(1);
                 break;
 
             case 1:
                 if (!follower.isBusy()) {
-                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1) {
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > .7) {
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(2);
                     }
@@ -240,7 +242,7 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 4:
                 if (!follower.isBusy()) {
-                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1) {
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > .7) {
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(5);
                     }
@@ -254,7 +256,7 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 7:
                 if (!follower.isBusy()) {
-                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > 1) {
+                    if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > .7) {
                         bob.intakeController.stopIntake();
                         if (isSpike1) {
                             pathState = 7;
@@ -273,7 +275,7 @@ public class Auto_1_1 extends OpMode {
     public void autoMain() {
         switch (pathState) {
             case 0:
-                follower.followPath(Path1);
+                follower.followPath(Path1, 1, true);
                 setP(1);
                 break;
             case 1:
@@ -284,7 +286,7 @@ public class Auto_1_1 extends OpMode {
                 break;
             case 2:
             case 11:
-                waitThenRun(2.7);
+                waitThenRun(3.3);
                 break;
 
             case 3:
@@ -389,7 +391,7 @@ public class Auto_1_1 extends OpMode {
 
                 break;
             case 19:
-                waitThenRun(2.7);
+                waitThenRun(3.3);
                 break;
             case 20:
                 follower.followPath(park);

@@ -9,7 +9,7 @@ public class BobConstants {
     // ==================== SHOOTER ====================
     public static double TICKS_PER_REV_SHOOTER = 28;
     public static int RPM_ZONE1 = 2570;
-    public static int RPM_ZONE1_AUTO = 2570;
+    public static int RPM_ZONE1_AUTO = 2500;
     public static int RPM_ZONE2 = 3200;
     public static int RPM_OFF = 0;
     // ZONE 1 PID Values
@@ -26,6 +26,9 @@ public class BobConstants {
     public static double SPINDEX_KP = 0.00032;
     public static double SPINDEX_KI = 0;
     public static double SPINDEX_KD = 0.00005;
+//    public static double SPINDEX_KP = 0.0003;
+//    public static double SPINDEX_KI = 0.00003;
+//    public static double SPINDEX_KD = 0.00007;
 
     public static double SPINDEX_KP_A = 0.00014;
     public static double SPINDEX_KI_A = 0.000009;
@@ -36,7 +39,7 @@ public class BobConstants {
 
 
     // ==================== TRANSFER ====================
-    public static double TRANSFER_UP = 0.43;
+    public static double TRANSFER_UP = 0.6;
     public static double TRANSFER_DOWN = 0.1;
     public static double TRANSFER_PULSE_TIME = 300; // milliseconds
 

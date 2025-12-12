@@ -7,27 +7,28 @@ public class Macros {
     public static final BobState SHOOT_ALL_THREE_AUTO_FINAL = new BobState(null, 60.0, null, null, null, null);
     public static final BobState SHOOT_ALL_THREE_AUTO8 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO_FINAL));
     public static final BobState SHOOT_ALL_THREE_AUTO7 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO8));
-    public static final BobState SHOOT_ALL_THREE_AUTO6 = new BobState(null, 120.0, null, null, null, new LinkedState(Link.LinkType.WAIT, 500, SHOOT_ALL_THREE_AUTO7));  // Absolute 240°
+    public static final BobState SHOOT_ALL_THREE_AUTO6 = new BobState(null, 120.0, null, null, null, new LinkedState(Link.LinkType.WAIT, 700, SHOOT_ALL_THREE_AUTO7));  // Absolute 240°
     public static final BobState SHOOT_ALL_THREE_AUTO5 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO6));
     public static final BobState SHOOT_ALL_THREE_AUTO4 = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO5));
-    public static final BobState SHOOT_ALL_THREE_AUTO3 = new BobState(null, 120.0, null, null, null, new LinkedState(Link.LinkType.WAIT, 500, SHOOT_ALL_THREE_AUTO4));  // Absolute 120°
+    public static final BobState SHOOT_ALL_THREE_AUTO3 = new BobState(null, 120.0, null, null, null, new LinkedState(Link.LinkType.WAIT, 700, SHOOT_ALL_THREE_AUTO4));  // Absolute 120°
     public static final BobState SHOOT_ALL_THREE_AUTO2 = new BobState(null, null, null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_AUTO3));
-    public static final BobState SHOOT_ALL_THREE_AUTO = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO2));
+    public static final BobState SHOOT_ALL_THREE_AUTO__ = new BobState(null, null, null, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 350, SHOOT_ALL_THREE_AUTO2));
+    public static final BobState SHOOT_ALL_THREE_AUTO = new BobState(null, null, null, null, null, new LinkedState(Link.LinkType.WAIT, 50, SHOOT_ALL_THREE_AUTO__));
 
     public static final BobState SHOOT_ALL_THREE_FINAL = new BobState(0, 60.0,null, null, null, null);
     // shoot 3 ball
     public static final BobState SHOOT_ALL_THREE8 = new BobState(null, null,null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE_FINAL));
-    public static final BobState SHOOT_ALL_THREE7 = new BobState(null, null, null,TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE8));
+    public static final BobState SHOOT_ALL_THREE7 = new BobState(null, null, null,TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 340, SHOOT_ALL_THREE8));
     // spin to next ball
-    public static final BobState SHOOT_ALL_THREE6 = new BobState(null, 120.0, null,null, null, new LinkedState(Link.LinkType.WAIT, 400, SHOOT_ALL_THREE7));
+    public static final BobState SHOOT_ALL_THREE6 = new BobState(null, 120.0, null,null, null, new LinkedState(Link.LinkType.WAIT, 600, SHOOT_ALL_THREE7));
     //shoot 2 ball
     public static final BobState SHOOT_ALL_THREE5 = new BobState(null, null, null,TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE6));
-    public static final BobState SHOOT_ALL_THREE4 = new BobState(null, null, null,TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE5));
+    public static final BobState SHOOT_ALL_THREE4 = new BobState(null, null, null,TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 340, SHOOT_ALL_THREE5));
     // spin to next ball
-    public static final BobState SHOOT_ALL_THREE3 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT, 400, SHOOT_ALL_THREE4));
+    public static final BobState SHOOT_ALL_THREE3 = new BobState(null, 120.0,null, null, null, new LinkedState(Link.LinkType.WAIT, 600, SHOOT_ALL_THREE4));
     // shoot 1 ball
     public static final BobState SHOOT_ALL_THREE2 = new BobState(null, null,null, TRANSFER_DOWN, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE3));
-    public static final BobState SHOOT_ALL_THREE = new BobState(null, null,false, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 260, SHOOT_ALL_THREE2));
+    public static final BobState SHOOT_ALL_THREE = new BobState(null, null,false, TRANSFER_UP, null, new LinkedState(Link.LinkType.WAIT, 340, SHOOT_ALL_THREE2));
 
     // spin shooter zone1
     public static final BobState SHOOTER_ZONE1 = new BobState(RPM_ZONE1, null, null);
