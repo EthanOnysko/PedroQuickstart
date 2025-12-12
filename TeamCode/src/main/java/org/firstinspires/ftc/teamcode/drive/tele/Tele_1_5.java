@@ -48,7 +48,7 @@ public class Tele_1_5 extends OpMode {
     private Timer macroTimer, actionTimer, opmodeTimer;
     Gamepad lastGamepad1 = new Gamepad(), lastGamepad2 = new Gamepad();
     Deque<Gamepad> gamepad1History = new LinkedList<>(), gamepad2History = new LinkedList<>();
-    private PID rotationPID = new PID(1.7,0,.08);
+    private PID rotationPID = new PID(1.5,0,.08);
     private boolean rotationCorrectionOn = false;
     private double rotationPower = 0;
     private double currentAngle = 0;
@@ -86,7 +86,8 @@ public class Tele_1_5 extends OpMode {
 
         // pedro
       //  startPose = Objects.requireNonNullElseGet(RobotContext.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
-        startPose = Objects.requireNonNullElseGet(null, () -> new Pose(95, 37, Math.toRadians(0)));
+        startPose = Objects.requireNonNullElseGet(null, () ->
+                new Pose(102.8923076923077, 66.21538461538462, Math.toRadians(-15)));
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);

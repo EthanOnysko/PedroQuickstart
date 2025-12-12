@@ -176,16 +176,16 @@ public class Auto_1_1 extends OpMode {
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(117.000, 60.000), new Pose(85, 85))
+                        new BezierLine(new Pose(125, 60.000), new Pose(85, 85))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
         park = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(85, 85), new Pose(95, 37))
+                        new BezierLine(new Pose(85, 85), new Pose(102.8923076923077, 66.21538461538462))
                 )
-                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(0))
+                .setLinearHeadingInterpolation(Math.toRadians(45), Math.toRadians(-15))
                 .build();
 
 

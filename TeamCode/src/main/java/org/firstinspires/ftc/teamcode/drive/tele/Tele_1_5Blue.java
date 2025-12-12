@@ -86,7 +86,7 @@ public class Tele_1_5Blue extends OpMode {
 
         // pedro
         //  startPose = Objects.requireNonNullElseGet(RobotContext.lastPose, () -> new Pose(95, 37, Math.toRadians(0)));
-        startPose = Objects.requireNonNullElseGet(null, () -> new Pose(49, 37, Math.toRadians(180)));
+        startPose = Objects.requireNonNullElseGet(null, () -> new Pose(42, 66.21538461538462, Math.toRadians(195)));
 
         follower = Constants.createFollower(hardwareMap);
         follower.setStartingPose(startPose);
