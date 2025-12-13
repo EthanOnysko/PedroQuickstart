@@ -214,6 +214,9 @@ public class Bob extends Meccanum implements Robot {
             spinPID = new PIDSpindexer(TICKS_PER_REV_SPINDEXER, SPINDEX_KP, SPINDEX_KI, SPINDEX_KD);
             spinPID.reset(0);
         }
+        public void setConsts(double p, double i, double d) {
+            spinPID.setConsts(p,i,d);
+        }
 
         public void setTargetAngle(double angle) {
             targetAngle = angle;

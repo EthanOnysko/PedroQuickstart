@@ -2,6 +2,12 @@ package org.firstinspires.ftc.teamcode.drive.autos;
 
 import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL_PROX;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KD;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KD_A;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KI;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KI_A;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KP;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KP_A;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_AUTO_2;
@@ -31,7 +37,7 @@ import org.firstinspires.ftc.teamcode.robot.RobotContext;
 
 import java.util.List;
 
-@Autonomous(name = "1.4 - Final Ram")
+@Autonomous(name = "1.4 - RAM RED (QUALS READY)")
 public class Auto_1_4 extends OpMode {
     private final Bob bob = new Bob();
 
@@ -67,6 +73,7 @@ public class Auto_1_4 extends OpMode {
     public PathChain ramPath;
 
     private void endAuto() {
+        bob.cancelMacros();
         if (pathState != -1) setP(20);
         if (opmodeTimer.getElapsedTimeSeconds() > 29.9 || pathState == -1) savePose();
     }
@@ -238,6 +245,7 @@ public class Auto_1_4 extends OpMode {
             case 0:
                 if (isSpike1) follower.followPath(Path3, .35, true);
                 else follower.followPath(SpikeMark21, .35, true);
+                actionTimer.resetTimer();
                 setI(1);
                 break;
 
@@ -249,9 +257,16 @@ public class Auto_1_4 extends OpMode {
                     }
 
                 }
+                else{
+                    if (bob.isBall()) {
+                        bob.runMacro(SPINDEXER_RIGHT);
+                        setI(2);
+                    }
+                }
                 break;
             case 2:
             case 5:
+                bob.spindexerController.setConsts(SPINDEX_KP,SPINDEX_KI,SPINDEX_KD);
                 waitSpike(.5);
                 break;
             case 3:
@@ -265,6 +280,11 @@ public class Auto_1_4 extends OpMode {
                     if (bob.isBall() || actionTimer.getElapsedTimeSeconds() > .7) {
                         bob.runMacro(SPINDEXER_RIGHT);
                         setI(5);
+                    }
+                }else{
+                    if (bob.isBall()) {
+                        bob.runMacro(SPINDEXER_RIGHT);
+                        setI(2);
                     }
                 }
                 break;
@@ -313,6 +333,7 @@ public class Auto_1_4 extends OpMode {
 
             case 3:
                 shootingAllThree1 = false;
+                ram=0;
                 follower.followPath(Path2);
                 bob.intakeController.intake();
                 setP(4);
@@ -321,11 +342,13 @@ public class Auto_1_4 extends OpMode {
             case 4:
                 if (!follower.isBusy()) {
                     waitThenRun(.5);
+                    bob.spindexerController.setConsts(SPINDEX_KP_A,SPINDEX_KI_A,SPINDEX_KD_A);
                 }
 
                 break;
             case 5:
             case 14:
+
                 intakeSpikeMarks();
                 break;
 
@@ -459,6 +482,7 @@ public class Auto_1_4 extends OpMode {
             double heading = Math.abs(current.getHeading() - expected.getHeading());
             boolean pushed = (Math.hypot(x, y) > 7.0) || heading > 8.0;
             if (pushed) {
+
                 bob.cancelMacros();
                 waiting = false;
                 double newX;
