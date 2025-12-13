@@ -238,6 +238,7 @@ public class Tele_1_2 extends OpMode {
 
     private void updateRotationCorrection() {
         if (rotationCorrectionOn) {
+
             LLResult result = limelight.getLatestResult();
             if (result != null && result.isValid()) {
                 currentAngle = Math.toRadians(result.getTx());

@@ -31,10 +31,11 @@ import org.firstinspires.ftc.teamcode.robot.RobotContext;
 
 import java.util.List;
 
-@Autonomous(name = "ram tf into them")
-public class Auto_1_3 extends OpMode {
+@Autonomous(name = "1.4 - Final Ram")
+public class Auto_1_4 extends OpMode {
     private final Bob bob = new Bob();
 
+    private double ramDistance = 10.0;
     private int checkpoint3 = 1;
     private boolean shootingAllThree1 = false;
     private int greenBallTarget = 1;
@@ -427,8 +428,6 @@ public class Auto_1_3 extends OpMode {
             case 21:
                 ramThatFucker();
                 break;
-
-
             default:
                 break;
         }
@@ -463,13 +462,13 @@ public class Auto_1_3 extends OpMode {
                 bob.cancelMacros();
                 waiting = false;
                 double newX;
-                if (x > 0) {newX = current.getX()+5.0;}
-                else {newX = current.getX()-5.0;}
+                double newY;
+                double L = Math.sqrt((x*x) + (y*y));
+                newX = current.getX() + ramDistance*(x)/L;
+                newY = current.getY() + ramDistance*(y)/L;
                 double newAngle = Math.tanh(y/x);
-                double newY = 85 + (y/x)*(newX - 85);
-                double newX2;
-                if (x > 0) {newX2 = 80.0;} else {newX2 = 90.0;}
-                double newY2 = 85 + (y/x)*(newX2 - 85);
+                double newX2 = 85 + ramDistance*((85-current.getX())/L);
+                double newY2 = 85 + ramDistance*((85-current.getY())/L);
                 ramPath = follower.pathBuilder()
                         .addPath(new BezierLine(new Pose(current.getX(), current.getY()), new Pose(newX, newY)))
                         .setLinearHeadingInterpolation(Math.toRadians(current.getHeading()), newAngle)
