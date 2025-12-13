@@ -83,6 +83,7 @@ public class Auto_1_4_Blue extends OpMode {
         double newY = FIELD_SIZE - y;
         double newH = -h;
 
+        // normalize to [-π, π)
         if (newH > Math.PI) newH -= 2 * Math.PI;
         if (newH <= -Math.PI) newH += 2 * Math.PI;
 
@@ -90,7 +91,6 @@ public class Auto_1_4_Blue extends OpMode {
     }
 
     private void endAuto() {
-        bob.shooterController.setRPM(0);
         bob.cancelMacros();
         if (pathState != -1) setP(20);
         if (opmodeTimer.getElapsedTimeSeconds() > 29.9 || pathState == -1) savePose();
@@ -530,7 +530,7 @@ public class Auto_1_4_Blue extends OpMode {
 
         if (shootingAllThree1) {
             Pose current = follower.getPose();
-            Pose expected = (mirrorRedToBlue(new Pose(85, 85,Math.toRadians(45)))); //new: (59, 85, 135 degrees)
+            Pose expected = mirrorRedToBlue(new Pose(85, 85, Math.toRadians(45))); //new: (60, 85, 135 degrees)
             double x = current.getX() - expected.getX();
             double y = current.getY() - expected.getY();
             double heading = Math.abs(current.getHeading() - expected.getHeading());
