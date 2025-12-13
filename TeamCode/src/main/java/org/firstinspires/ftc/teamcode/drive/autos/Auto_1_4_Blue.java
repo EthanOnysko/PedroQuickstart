@@ -530,7 +530,7 @@ public class Auto_1_4_Blue extends OpMode {
 
         if (shootingAllThree1) {
             Pose current = follower.getPose();
-            Pose expected = mirrorRedToBlue(new Pose(85, 85, Math.toRadians(45))); //new: (60, 85, 135 degrees)
+            Pose expected = mirrorRedToBlue(new Pose(85, 85, Math.toRadians(45)));
             double x = current.getX() - expected.getX();
             double y = current.getY() - expected.getY();
             double heading = Math.abs(current.getHeading() - expected.getHeading());
@@ -545,15 +545,21 @@ public class Auto_1_4_Blue extends OpMode {
                 newX = current.getX() + ramDistance * (x) / L;
                 newY = current.getY() + ramDistance * (y) / L;
                 double newAngle = Math.tanh(y / x);
-                double newX2 = 60 + ramDistance * ((60 - current.getX()) / L);
-                double newY2 = 85 + ramDistance * ((85 - current.getY()) / L);
+
+                double targetX = expected.getX();
+                double targetY = expected.getY();
+                double targetHeading = expected.getHeading();
+
+                double newX2 = targetX + ramDistance * ((targetX - current.getX()) / L);
+                double newY2 = targetY + ramDistance * ((targetY - current.getY()) / L);
+
                 ramPath = follower.pathBuilder()
                         .addPath(new BezierLine(new Pose(current.getX(), current.getY()), new Pose(newX, newY)))
-                        .setLinearHeadingInterpolation(Math.toRadians(current.getHeading()), newAngle)
+                        .setLinearHeadingInterpolation(current.getHeading(), newAngle)
                         .addPath(new BezierLine(new Pose(newX, newY), new Pose(newX2, newY2)))
                         .setTangentHeadingInterpolation().setReversed()
-                        .addPath(new BezierLine(new Pose(newX2, newY2), new Pose(60.000, 85)))
-                        .setLinearHeadingInterpolation(Math.toRadians(newAngle), Math.toRadians(135))
+                        .addPath(new BezierLine(new Pose(newX2, newY2), new Pose(targetX, targetY)))
+                        .setLinearHeadingInterpolation(newAngle, targetHeading)
                         .build();
                 pathState = 21;
             }
