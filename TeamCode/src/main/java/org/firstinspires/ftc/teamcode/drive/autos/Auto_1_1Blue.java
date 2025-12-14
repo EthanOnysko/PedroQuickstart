@@ -83,12 +83,17 @@ public class Auto_1_1Blue extends OpMode {
     }
 
     private void endAuto() {
-        if (finished) return;
+        bob.shooterController.setRPM(0);
+        bob.cancelMacros();
+        if (pathState != -1) setP(20);
+        if (opmodeTimer.getElapsedTimeSeconds() > 29.9 || pathState == -1) savePose();
+    }
+    private void savePose() {
+        if (finished) return;  // make it idempotent
 
         finished = true;
         RobotContext.lastPose = follower.getPose();
         RobotContext.lastSpindexerTicks = bob.spincoder.getCurrentPosition();
-
     }
 
     public void buildPaths() {
@@ -223,17 +228,20 @@ public class Auto_1_1Blue extends OpMode {
                 .addPath(
                         new BezierLine(
                                 mirrorRedToBlue(new Pose(112.000, 60.000)),
-                                mirrorRedToBlue(new Pose(125, 60.000))
+                                mirrorRedToBlue(new Pose(130, 55))
                         )
                 )
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(
+                        -Math.toRadians(0),
+                        -Math.toRadians(0)
+                )
                 .build();
 
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                mirrorRedToBlue(new Pose(125, 60.000)),
+                                mirrorRedToBlue(new Pose(130, 55)),
                                 mirrorRedToBlue(new Pose(85, 85))
                         )
                 )
@@ -494,7 +502,7 @@ public class Auto_1_1Blue extends OpMode {
     public void loop() {
 
         bigTick();
-        if (pathState == -1 || opmodeTimer.getElapsedTimeSeconds() > 29.5) {
+        if (pathState == -1 || opmodeTimer.getElapsedTimeSeconds() > 29) {
             endAuto();
         }
 

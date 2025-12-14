@@ -62,6 +62,12 @@ public class Auto_1_1 extends OpMode {
     public PathChain Path100;
 
     private void endAuto() {
+        bob.shooterController.setRPM(0);
+        bob.cancelMacros();
+        if (pathState != -1) setP(20);
+        if (opmodeTimer.getElapsedTimeSeconds() > 29.9 || pathState == -1) savePose();
+    }
+    private void savePose() {
         if (finished) return;  // make it idempotent
 
         finished = true;
@@ -168,15 +174,15 @@ public class Auto_1_1 extends OpMode {
         SpikeMark23 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(112.000, 60.000), new Pose(125.000, 60.000))
+                        new BezierLine(new Pose(112.000, 60.000), new Pose(130, 55))
                 )
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(125, 60.000), new Pose(85, 85))
+                        new BezierLine(new Pose(130, 55), new Pose(85, 85))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
@@ -428,7 +434,7 @@ public class Auto_1_1 extends OpMode {
     public void loop() {
 
         bigTick();
-        if (pathState == -1 || opmodeTimer.getElapsedTimeSeconds() > 29.5) {
+        if (pathState == -1 || opmodeTimer.getElapsedTimeSeconds() > 29) {
             endAuto();
         }
 

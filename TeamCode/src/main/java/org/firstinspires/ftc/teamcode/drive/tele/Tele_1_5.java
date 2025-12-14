@@ -109,6 +109,7 @@ public class Tele_1_5 extends OpMode {
     }
     @Override
     public void start() {
+        bob.spindexerController.setConsts(SPINDEX_KP_A,SPINDEX_KI_A,SPINDEX_KD_A);
         bob.transferController.setDown();
         limelight.start();
         macroTimer.resetTimer();
@@ -151,18 +152,22 @@ public class Tele_1_5 extends OpMode {
         } else {
             rotationPower = 0;
         }
-
         telemetry.update();
     }
     private void drive(){
-        if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1) {
+        if (!gamepad1.right_bumper && gamepad1.right_trigger <= 0.1 && gamepad1.left_trigger<=0.1) {
             // normal driving
             bob.motorDriveXYVectors(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
-        else if (gamepad1.right_bumper) {
+        else if (gamepad1.right_bumper && gamepad1.left_trigger <= 0.1) {
             // slow
             bob.motorDriveXYVectors(0.85 * gamepad1.left_stick_x, 0.85 * -gamepad1.left_stick_y, 0.4 * gamepad1.right_stick_x);
+            rotationCorrectionOn = false;
+        }
+        else if (gamepad1.left_trigger >= 0.1) {
+            // slow
+            bob.motorDriveXYVectors(0.3 * gamepad1.left_stick_x, 0.3 * -gamepad1.left_stick_y, 0.3 * gamepad1.right_stick_x);
             rotationCorrectionOn = false;
         }
         else if (gamepad1.right_trigger > 0.1) {

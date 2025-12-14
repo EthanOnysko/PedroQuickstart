@@ -24,6 +24,12 @@ import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.BALL
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.LSERVO;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.RPM_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.RPM_ZONE2;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KD;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KD_A;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KI;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KI_A;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KP;
+import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.BobConstants.SPINDEX_KP_A;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_OFF;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1;
 import static org.firstinspires.ftc.teamcode.robot.Bob.helpers.Macros.SHOOTER_ZONE1_MATIC;
@@ -102,6 +108,7 @@ public class Tele_1_5Blue extends OpMode {
     }
     @Override
     public void start() {
+        bob.spindexerController.setConsts(SPINDEX_KP_A,SPINDEX_KI_A,SPINDEX_KD_A);
         bob.transferController.setDown();
         limelight.start();
         macroTimer.resetTimer();
@@ -210,6 +217,7 @@ public class Tele_1_5Blue extends OpMode {
                 actionTimer.getElapsedTimeSeconds() > .5 &&
                 numBalls < 3
         ){
+            bob.spindexerController.setConsts(SPINDEX_KP,SPINDEX_KI,SPINDEX_KD);
             numBalls++;
             actionTimer.resetTimer();
             bob.runMacro(SPINDEXER_RIGHT);
@@ -231,6 +239,7 @@ public class Tele_1_5Blue extends OpMode {
         if (macroTimer.getElapsedTimeSeconds() > 3) {
             isMacroing = false;
             numBalls = 0;
+            bob.spindexerController.setConsts(SPINDEX_KP_A,SPINDEX_KI_A,SPINDEX_KD_A);
         }
         if (!isMacroing) macroTimer.resetTimer();
 

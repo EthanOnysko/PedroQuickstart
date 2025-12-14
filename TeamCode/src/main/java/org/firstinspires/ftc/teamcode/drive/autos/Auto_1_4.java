@@ -185,15 +185,15 @@ public class Auto_1_4 extends OpMode {
         SpikeMark23 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(112.000, 60.000), new Pose(125.000, 60.000))
+                        new BezierLine(new Pose(112.000, 60.000), new Pose(130, 55))
                 )
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
                 .build();
 
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
-                        new BezierLine(new Pose(125, 60.000), new Pose(85, 85))
+                        new BezierLine(new Pose(130, 55), new Pose(85, 85))
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(45))
                 .build();
@@ -481,7 +481,7 @@ public class Auto_1_4 extends OpMode {
             double x = current.getX() - expected.getX();
             double y = current.getY() - expected.getY();
             double heading = Math.abs(current.getHeading() - expected.getHeading());
-            boolean pushed = (Math.hypot(x, y) > 7.0) || heading > 8.0;
+            boolean pushed = (Math.hypot(x, y) > 10.0) || heading > Math.toRadians(10.0);
             if (pushed) {
 
                 bob.cancelMacros();

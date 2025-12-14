@@ -236,17 +236,19 @@ public class Auto_1_4_Blue extends OpMode {
                 .addPath(
                         new BezierLine(
                                 mirrorRedToBlue(new Pose(112.000, 60.000)),
-                                mirrorRedToBlue(new Pose(125.000, 60.000))
+                                mirrorRedToBlue(new Pose(130, 55))
                         )
                 )
-                .setTangentHeadingInterpolation()
+                .setLinearHeadingInterpolation(
+                        -Math.toRadians(0),
+                        -Math.toRadians(0))
                 .build();
 
         SpikeMark24 = follower
                 .pathBuilder()
                 .addPath(
                         new BezierLine(
-                                mirrorRedToBlue(new Pose(125, 60.000)),
+                                mirrorRedToBlue(new Pose(130, 55)),
                                 mirrorRedToBlue(new Pose(85, 85))
                         )
                 )
@@ -533,10 +535,9 @@ public class Auto_1_4_Blue extends OpMode {
             Pose expected = mirrorRedToBlue(new Pose(85, 85, Math.toRadians(45)));
             double x = current.getX() - expected.getX();
             double y = current.getY() - expected.getY();
-            double heading = Math.abs(current.getHeading() - expected.getHeading());
+            double heading = Math.abs(Math.toDegrees(current.getHeading()) - Math.toDegrees(expected.getHeading()));
             boolean pushed = (Math.hypot(x, y) > 7.0) || heading > 8.0;
-            if (pushed) {
-
+            if (false) {
                 bob.cancelMacros();
                 waiting = false;
                 double newX;
@@ -569,11 +570,13 @@ public class Auto_1_4_Blue extends OpMode {
     @Override
     public void loop() {
         bigTick();
+
         if (pathState == -1 || opmodeTimer.getElapsedTimeSeconds() > 29) {
             endAuto();
         }
 
         telemetry.addData("there is ball: ", bob.isBall());
+        telemetry.addData("Current Pedro Pose: ", follower.getPose());
         telemetry.update();
     }
 
